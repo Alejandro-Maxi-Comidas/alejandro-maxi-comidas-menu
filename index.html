@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maxicomidas - Menú Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; -webkit-tap-highlight-color: transparent; }
+        .category-btn.active { background-color: #1d3557; color: white; transform: scale(1.05); box-shadow: 0 4px 12px rgba(29, 53, 87, 0.3); }
+        .cart-drawer { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .drawer-open { transform: translateY(0); }
+        .drawer-closed { transform: translateY(100%); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .animate-slide-up { animation: slideUp 0.3s ease-out; }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <header class="sticky top-0 z-40 bg-[#1d3557] text-white px-6 py-4 shadow-xl rounded-b-[2rem]">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-extrabold tracking-tight italic">MAXICOMIDAS</h1>
+            <span class="text-[10px] font-medium uppercase text-red-400">Lunes Cerrado</span>
+        </div>
+    </header>
+
+    <nav class="max-w-md mx-auto px-4 mt-6 overflow-x-auto no-scrollbar flex gap-3 py-2 sticky top-[72px] z-30 bg-gray-50/80 backdrop-blur-md">
+        <button onclick="filterItems('todos')" class="category-btn active px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap">Todos</button>
+        <button onclick="filterItems('hoy')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap">Hoy</button>
+        <button onclick="filterItems('pastas')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap">Pastas</button>
+        <button onclick="filterItems('milanesas')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap">Milanesas</button>
+    </nav>
+
+    <main class="max-w-md mx-auto px-4 mt-4 pb-40 space-y-4" id="menu-grid"></main>
+
+    <script>
+      /* MENU_JSON_START */
+      const menuData = []; 
+      /* MENU_JSON_END */
+
+        function renderMenu(items) {
+            const grid = document.getElementById('menu-grid');
+            grid.innerHTML = '';
+            items.forEach(item => {
+                grid.innerHTML += `
+                    <div class="bg-white rounded-3xl p-4 border border-gray-100 shadow-sm flex items-center gap-4 animate-slide-up">
+                        <div class="flex-1">
+                            <span class="text-[8px] font-black uppercase text-blue-500 bg-blue-50 px-2 py-0.5 rounded-md mb-1 inline-block">${item.cat}</span>
+                            <h3 class="text-gray-900 font-extrabold text-sm leading-tight mb-1">${item.name}</h3>
+                            <p class="text-[10px] text-gray-400 font-medium mb-3 italic">${item.desc}</p>
+                            <div class="flex items-center gap-4">
+                                <p class="text-base font-black text-gray-800">$${item.cash.toLocaleString()}</p>
+                                <p class="text-[9px] text-gray-400">Transfer: $${item.mp.toLocaleString()}</p>
+                            </div>
+                        </div>
+                        <button onclick="alert('Funcionalidad de carrito aquí')" class="bg-[#1d3557] text-white w-12 h-12 rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        function filterItems(cat) {
+            renderMenu(cat === 'todos' ? menuData : menuData.filter(i => i.cat === cat));
+        }
+
+        window.onload = () => renderMenu(menuData);
+    </script>
+</body>
+</html>
