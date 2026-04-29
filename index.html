@@ -14,7 +14,7 @@
         
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f9fafb;
+            background-color: #f3f4f6;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -43,32 +43,53 @@
         .animate-slide-up {
             animation: slideUp 0.3s ease-out;
         }
+
+        .payment-option:checked + label {
+            border-color: #1d3557;
+            background-color: #f0f4f8;
+            color: #1d3557;
+        }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <!-- Header -->
-    <header class="sticky top-0 z-40 bg-[#1d3557] text-white px-6 py-4 shadow-xl rounded-b-[2rem]">
-        <div class="max-w-md mx-auto flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-extrabold tracking-tight italic">MAXICOMIDAS</h1>
-                <p class="text-[10px] uppercase tracking-widest text-blue-200 font-bold">Sabor Casero & Delivery</p>
+    <!-- Header Mejorado -->
+    <header class="bg-[#1d3557] text-white px-6 pt-6 pb-8 shadow-xl rounded-b-[2.5rem]">
+        <div class="max-w-md mx-auto">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h1 class="text-3xl font-extrabold tracking-tight italic">MAXICOMIDAS</h1>
+                    <p class="text-[11px] uppercase tracking-widest text-blue-200 font-bold">Sabor Casero & Delivery</p>
+                </div>
+                <a href="https://wa.me/5491161850833?text=Hola!%20Tengo%20una%20consulta" class="bg-white/10 p-3 rounded-full hover:bg-white/20 transition-colors">
+                    <i class="fab fa-whatsapp text-xl"></i>
+                </a>
             </div>
-            <div class="text-right">
-                <span class="block text-[10px] text-red-400 font-black uppercase">Lunes Cerrado</span>
+            
+            <div class="grid grid-cols-2 gap-3 mt-4">
+                <div class="bg-white/10 rounded-2xl p-3 border border-white/5">
+                    <p class="text-[9px] uppercase font-black text-blue-300 mb-1">Transferencias</p>
+                    <p class="text-xs font-bold truncate">Alias: MAXI.COM.ALE</p>
+                </div>
+                <div class="bg-white/10 rounded-2xl p-3 border border-white/5">
+                    <p class="text-[9px] uppercase font-black text-red-300 mb-1">Horarios</p>
+                    <p class="text-xs font-bold">Mar a Dom 11-15hs</p>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Info Section (Opcional, pero ayuda al usuario) -->
-    <div class="max-w-md mx-auto px-4 mt-4 space-y-2 text-center">
-        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">
-            <i class="fas fa-motorcycle mr-1"></i> Envío sin cargo • <i class="fas fa-university ml-2 mr-1"></i> Alias: MAXI.COM.ALE
-        </p>
+    <!-- Info Pill -->
+    <div class="max-w-md mx-auto -mt-5 px-6">
+        <div class="bg-white rounded-full shadow-lg py-2 px-4 flex justify-between items-center text-[10px] font-black text-gray-500 uppercase tracking-tight border border-gray-100">
+            <span><i class="fas fa-motorcycle text-blue-500 mr-1"></i> Envío sin cargo</span>
+            <span class="w-px h-3 bg-gray-200"></span>
+            <span class="text-red-500">Lunes Cerrado</span>
+        </div>
     </div>
 
     <!-- Categorías -->
-    <nav class="max-w-md mx-auto px-4 mt-4 overflow-x-auto no-scrollbar flex gap-3 py-2 sticky top-[72px] z-30 bg-gray-50/80 backdrop-blur-md">
+    <nav class="max-w-md mx-auto px-4 mt-6 overflow-x-auto no-scrollbar flex gap-3 py-2 sticky top-0 z-30 bg-gray-50/50 backdrop-blur-md">
         <button onclick="filterItems('todos')" class="category-btn active px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap transition-all">Todos</button>
         <button onclick="filterItems('hoy')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap transition-all">Hoy</button>
         <button onclick="filterItems('pastas')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap transition-all">Pastas</button>
@@ -98,9 +119,9 @@
         </div>
     </div>
 
-    <!-- Drawer Carrito (Detalle) -->
+    <!-- Drawer Carrito -->
     <div id="cart-drawer-overlay" class="fixed inset-0 bg-black/40 z-[60] hidden backdrop-blur-sm" onclick="toggleCartDrawer(false)"></div>
-    <div id="cart-drawer" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-[2.5rem] z-[70] cart-drawer drawer-closed max-h-[85vh] overflow-hidden flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
+    <div id="cart-drawer" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-[2.5rem] z-[70] cart-drawer drawer-closed max-h-[90vh] overflow-hidden flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
         <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mt-4 mb-2"></div>
         
         <div class="px-6 py-4 flex justify-between items-center border-b border-gray-50">
@@ -109,21 +130,38 @@
         </div>
 
         <div id="cart-items-list" class="flex-1 overflow-y-auto px-6 py-4 space-y-3 no-scrollbar bg-gray-50/50">
-            <!-- Items del carrito aparecerán aquí -->
+            <!-- Items del carrito -->
         </div>
 
-        <div class="bg-white p-6 border-t border-gray-100 space-y-3">
-            <div class="flex justify-between items-center text-sm">
-                <span class="text-gray-400 font-bold uppercase text-[10px]">Transferencia / MP:</span>
-                <span id="total-mp" class="font-bold text-blue-600 text-lg">$0</span>
+        <!-- Selección de Pago -->
+        <div class="px-6 py-4 bg-white border-t border-gray-100">
+            <p class="text-[10px] font-black uppercase text-gray-400 mb-3 tracking-widest text-center">Seleccioná cómo vas a pagar:</p>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <input type="radio" name="payment" id="pay-cash" value="cash" class="hidden payment-option" checked>
+                    <label for="pay-cash" class="flex flex-col items-center justify-center p-3 border-2 border-gray-100 rounded-2xl cursor-pointer transition-all">
+                        <i class="fas fa-money-bill-wave mb-1"></i>
+                        <span class="text-[10px] font-black uppercase">Efectivo</span>
+                    </label>
+                </div>
+                <div>
+                    <input type="radio" name="payment" id="pay-transfer" value="transfer" class="hidden payment-option">
+                    <label for="pay-transfer" class="flex flex-col items-center justify-center p-3 border-2 border-gray-100 rounded-2xl cursor-pointer transition-all">
+                        <i class="fas fa-university mb-1"></i>
+                        <span class="text-[10px] font-black uppercase">Transferencia</span>
+                    </label>
+                </div>
             </div>
-            <div class="flex justify-between items-center bg-green-50 p-4 rounded-2xl border border-green-100">
-                <span class="text-green-800 font-black uppercase text-xs italic">Total Efectivo:</span>
-                <span id="total-cash" class="font-black text-green-700 text-2xl tracking-tighter">$0</span>
+        </div>
+
+        <div class="bg-white p-6 pt-0 space-y-3">
+            <div class="flex justify-between items-center bg-[#1d3557] p-5 rounded-2xl text-white shadow-xl shadow-blue-900/20">
+                <span class="font-black uppercase text-xs italic opacity-80">Total a pagar:</span>
+                <span id="drawer-total-display" class="font-black text-2xl tracking-tighter">$0</span>
             </div>
-            <button onclick="sendWhatsApp()" class="w-full bg-[#1d3557] text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 shadow-xl active:scale-95 transition-transform">
+            <button onclick="sendWhatsApp()" class="w-full bg-[#25D366] text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 shadow-lg active:scale-95 transition-transform">
                 <i class="fab fa-whatsapp text-2xl"></i>
-                ENVIAR PEDIDO
+                ENVIAR POR WHATSAPP
             </button>
         </div>
     </div>
@@ -138,20 +176,17 @@
                 <h3 class="text-xl font-black text-gray-800 tracking-tight">Elegí tu Guarnición</h3>
                 <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Incluida en el precio</p>
             </div>
-            <div class="grid grid-cols-1 gap-2" id="sides-grid">
-                <!-- Opciones de guarnición dinámicas -->
-            </div>
+            <div class="grid grid-cols-1 gap-2" id="sides-grid"></div>
             <button onclick="closeSideModal()" class="w-full mt-6 py-3 text-gray-300 font-black text-[10px] uppercase tracking-widest">Cerrar</button>
         </div>
     </div>
 
     <script>
         /* MENU_JSON_START */
-        const menuData = [{"id":1,"name":"Guiso de lentejas","cat":"comidas","cash":13000,"mp":14000,"desc":"Guiso de lentejas","side":false},{"id":2,"name":"Pastel de bondiola y batatas","cat":"comidas","cash":15000,"mp":16000,"desc":"Bondiola al horno desmechada, pure batatas acaramelado","side":false},{"id":3,"name":"Pollo alhorno","cat":"comidas","cash":13000,"mp":14000,"desc":"Pollo alhorno","side":false},{"id":4,"name":"Bife de costilla a la plancha","cat":"comidas","cash":17000,"mp":19000,"desc":"Bife de costilla a la plancha","side":false},{"id":5,"name":"Ribs de cerdo con salsa barbacoa casera","cat":"comidas","cash":22000,"mp":24000,"desc":"Ribs de cerdo con salsa barbacoa casera","side":false},{"id":6,"name":"Ojo de bife a la plancha","cat":"comidas","cash":22000,"mp":24000,"desc":"Ojo de bife a la plancha","side":false},{"id":7,"name":"Pastel de papas","cat":"comidas","cash":12000,"mp":13000,"desc":"Pastel de papas","side":false},{"id":8,"name":"Pastel de calabaza espinaca y queso","cat":"comidas","cash":13000,"mp":14000,"desc":"Pastel de calabaza espinaca y queso","side":false},{"id":9,"name":"Pechugas cubiertas con cebolla, morron, verdeo, muzarrella y esparragos","cat":"comidas","cash":15000,"mp":16000,"desc":"Pechugas cubiertas con cebolla, morron, verdeo, muzarrella y esparragos","side":false},{"id":10,"name":"Pechugas cubiertas con espinacas y queso","cat":"comidas","cash":15000,"mp":16000,"desc":"Pechugas cubiertas con espinacas y queso","side":false},{"id":11,"name":"Pechugas caprese cubiertas con muzzarella, tomate y albahaca","cat":"comidas","cash":15000,"mp":16000,"desc":"Pechugas caprese cubiertas con muzzarella, tomate y albahaca","side":false},{"id":12,"name":"Pechugas a la plancha","cat":"comidas","cash":13000,"mp":14000,"desc":"Pechugas a la plancha","side":false},{"id":13,"name":"Tarta de jamon, queso, tomate, albahaca","cat":"comidas","cash":13000,"mp":14000,"desc":"Tarta de jamon, queso, tomate, albahaca","side":false},{"id":14,"name":"Tarta de espinaca y queso","cat":"comidas","cash":13000,"mp":14000,"desc":"Tarta de espinaca y queso","side":false},{"id":15,"name":"Tomates rellenos con arroz y atun","cat":"comidas","cash":12000,"mp":13000,"desc":"Tomates rellenos con arroz y atun","side":false},{"id":16,"name":"Ensaladas completa con jamon y queso","cat":"ensaladas","cash":12000,"mp":13000,"desc":"Lechuga, tomate, zanahoria, choclo, huevo, jamon y queso","side":false},{"id":17,"name":"Ensalada completa con pollo","cat":"ensaladas","cash":12000,"mp":13000,"desc":"Lechuga, tomate, zanahoria, choclo, huevo y pollo grillado","side":false},{"id":18,"name":"Ensalada completa con atun","cat":"ensaladas","cash":12000,"mp":13000,"desc":"Lechuga, tomate, zanahoria, choclo, huevo y atun","side":false},{"id":19,"name":"Tallarines con salsa rosa o pesto","cat":"pastas","cash":10000,"mp":11000,"desc":"Tallarines con salsa rosa o pesto","side":false},{"id":20,"name":"Tallarines con salsa bolognesa","cat":"pastas","cash":12000,"mp":13000,"desc":"Tallarines con salsa bolognesa","side":false},{"id":21,"name":"Ravioles de verdura y pollo","cat":"pastas","cash":13000,"mp":14000,"desc":"Ravioles de verdura y pollo","side":false},{"id":22,"name":"Ravioles de ricotta","cat":"pastas","cash":13000,"mp":14000,"desc":"Ravioles de ricotta","side":false},{"id":23,"name":"Canelones de espinaca","cat":"pastas","cash":13000,"mp":14000,"desc":"Canelones de espinaca","side":false},{"id":24,"name":"Lasagna de espinacas jamon y queso","cat":"pastas","cash":13000,"mp":14000,"desc":"Lasagna de espinacas jamon y queso","side":false},{"id":25,"name":"Capellettis caseros de ricotta jamon y muzarrella","cat":"pastas","cash":14000,"mp":15000,"desc":"Capellettis caseros de ricotta jamon y muzarrella","side":false},{"id":26,"name":"Sandwich completo de mila","cat":"milanesas","cash":13000,"mp":14000,"desc":"Mila, lechuga, tomate, jamon queso y mayonesa","side":false},{"id":27,"name":"Sandwich completo de mila con papas","cat":"milanesas","cash":15000,"mp":16000,"desc":"Mila, lechuga, tomate, jamon queso y mayonesa con papas","side":false},{"id":28,"name":"Milanesa de ternera","cat":"milanesas","cash":14000,"mp":15000,"desc":"Milanesa de ternera","side":false},{"id":29,"name":"Milanesa napolitana","cat":"milanesas","cash":16000,"mp":17000,"desc":"Milanesa napolitana","side":false},{"id":30,"name":"Suprema de pollo","cat":"milanesas","cash":14000,"mp":15000,"desc":"Suprema de pollo","side":false},{"id":31,"name":"Suprema napolitana","cat":"milanesas","cash":16000,"mp":17000,"desc":"Suprema napolitana","side":false},{"id":32,"name":"Milanesa de peceto","cat":"milanesas","cash":15000,"mp":16000,"desc":"Milanesa de peceto","side":false},{"id":33,"name":"Milanesa de peceto napolitana","cat":"milanesas","cash":17000,"mp":18000,"desc":"Milanesa de peceto napolitana","side":false},{"id":34,"name":"Filet de merluza rebozado","cat":"milanesas","cash":13000,"mp":14000,"desc":"Filet de merluza rebozado","side":false}];
+        const menuData = [{"id":1,"name":"Guiso de lentejas","cat":"comidas","cash":13000,"mp":14000,"desc":"Guiso de lentejas","side":false},{"id":2,"name":"Pastel de bondiola y batatas","cat":"comidas","cash":15000,"mp":16000,"desc":"Bondiola al horno desmechada, pure batatas acaramelado","side":false},{"id":3,"name":"Pollo alhorno","cat":"comidas","cash":13000,"mp":14000,"desc":"Pollo alhorno","side":true},{"id":4,"name":"Bife de costilla a la plancha","cat":"comidas","cash":17000,"mp":19000,"desc":"Bife de costilla a la plancha","side":true},{"id":5,"name":"Ribs de cerdo con salsa barbacoa casera","cat":"comidas","cash":22000,"mp":24000,"desc":"Ribs de cerdo con salsa barbacoa casera","side":true},{"id":6,"name":"Ojo de bife a la plancha","cat":"comidas","cash":22000,"mp":24000,"desc":"Ojo de bife a la plancha","side":true},{"id":28,"name":"Milanesa de ternera","cat":"milanesas","cash":14000,"mp":15000,"desc":"Milanesa de ternera","side":true},{"id":30,"name":"Suprema de pollo","cat":"milanesas","cash":14000,"mp":15000,"desc":"Suprema de pollo","side":true}];
         /* MENU_JSON_END */
 
-        const sideOptions = ["Papas en cubos", "Papas Fritas", "Puré de Papas", "Puré de Calabaza", "Puré Mixto", "Arroz", "Papa, Huevo y Mayo", "Ensalada Mixta"];
-        
+        const sideOptions = ["Papas en cubos", "Papas Fritas", "Puré de Papas", "Puré de Calabaza", "Puré Mixto", "Arroz", "Ensalada Mixta"];
         let cart = [];
         let pendingItem = null;
 
@@ -164,7 +199,7 @@
                         <div class="flex-1">
                             <span class="text-[8px] font-black uppercase text-blue-500 bg-blue-50 px-2 py-0.5 rounded-md mb-1 inline-block italic">${item.cat}</span>
                             <h3 class="text-gray-900 font-extrabold text-sm leading-tight mb-1">${item.name}</h3>
-                            <p class="text-[10px] text-gray-400 font-medium mb-3 italic line-clamp-1">${item.desc || 'Sin descripción'}</p>
+                            <p class="text-[10px] text-gray-400 font-medium mb-3 italic line-clamp-1">${item.desc || 'Sabor casero garantizado'}</p>
                             <div class="flex items-center gap-4">
                                 <div>
                                     <p class="text-[8px] text-green-600 font-black uppercase italic leading-none">Efectivo</p>
@@ -229,43 +264,36 @@
             if(cart.length === 0) toggleCartDrawer(false);
         }
 
-        function clearCart() { 
-            cart = []; 
-            updateUI(); 
-            toggleCartDrawer(false); 
-        }
+        function clearCart() { cart = []; updateUI(); toggleCartDrawer(false); }
 
         function updateUI() {
-            const summary = document.getElementById('cart-summary');
+            const isTransfer = document.getElementById('pay-transfer').checked;
             const badge = document.getElementById('cart-badge');
-            const textTotal = document.getElementById('cart-text-total');
-            const textQty = document.getElementById('cart-text-qty');
+            const summary = document.getElementById('cart-summary');
+            const totalDisplay = document.getElementById('cart-text-total');
+            const drawerTotal = document.getElementById('drawer-total-display');
+
+            const tCash = cart.reduce((acc, i) => acc + i.cash, 0);
+            const tMp = cart.reduce((acc, i) => acc + i.mp, 0);
 
             if (cart.length > 0) {
                 summary.classList.remove('translate-y-32');
                 badge.innerText = cart.length;
-                const total = cart.reduce((acc, i) => acc + i.cash, 0);
-                textTotal.innerText = `$${total.toLocaleString()}`;
-                textQty.innerText = `${cart.length} ${cart.length === 1 ? 'Producto' : 'Productos'}`;
+                totalDisplay.innerText = `$${(isTransfer ? tMp : tCash).toLocaleString()}`;
+                drawerTotal.innerText = `$${(isTransfer ? tMp : tCash).toLocaleString()}`;
             } else {
                 summary.classList.add('translate-y-32');
             }
 
             const list = document.getElementById('cart-items-list');
-            const totalMpDisplay = document.getElementById('total-mp');
-            const totalCashDisplay = document.getElementById('total-cash');
-            
             list.innerHTML = '';
-            let tMp = 0; let tCash = 0;
-
             cart.forEach(item => {
-                tMp += item.mp; tCash += item.cash;
                 list.innerHTML += `
                     <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
                         <div class="flex-1">
                             <h4 class="font-bold text-gray-800 text-xs">${item.name}</h4>
                             ${item.selectedSide ? `<p class="text-[9px] text-blue-500 font-bold uppercase italic mt-0.5">Guarnición: ${item.selectedSide}</p>` : ''}
-                            <p class="text-[10px] font-black text-green-600 mt-1">$${item.cash.toLocaleString()}</p>
+                            <p class="text-[10px] font-black text-gray-400 mt-1">$${(isTransfer ? item.mp : item.cash).toLocaleString()}</p>
                         </div>
                         <button onclick="removeFromCart(${item.cartId})" class="text-gray-300 p-2 active:text-red-500">
                             <i class="fas fa-trash-alt"></i>
@@ -273,9 +301,6 @@
                     </div>
                 `;
             });
-
-            totalMpDisplay.innerText = `$${tMp.toLocaleString()}`;
-            totalCashDisplay.innerText = `$${tCash.toLocaleString()}`;
         }
 
         function toggleCartDrawer(show) {
@@ -298,27 +323,35 @@
 
         function sendWhatsApp() {
             if (cart.length === 0) return;
+            const isTransfer = document.getElementById('pay-transfer').checked;
             
             let msg = "*PEDIDO - MAXICOMIDAS*\n";
             msg += "----------------------------\n";
             cart.forEach(i => {
-                msg += `• *${i.name}*\n`;
+                const precio = isTransfer ? i.mp : i.cash;
+                msg += `• *${i.name}* ($${precio.toLocaleString()})\n`;
                 if(i.selectedSide) msg += `  _Guarnición: ${i.selectedSide}_\n`;
             });
             msg += "----------------------------\n";
             
-            const cashTotal = cart.reduce((a, b) => a + b.cash, 0);
-            const mpTotal = cart.reduce((a, b) => a + b.mp, 0);
-            
-            msg += `💰 *TOTAL EFECTIVO: $${cashTotal.toLocaleString()}*\n`;
-            msg += `📱 *TOTAL TRANSFERENCIA: $${mpTotal.toLocaleString()}*\n\n`;
+            const total = cart.reduce((a, b) => a + (isTransfer ? b.mp : b.cash), 0);
+            msg += `✅ *TOTAL A PAGAR: $${total.toLocaleString()}*\n`;
+            msg += `💳 *MEDIO DE PAGO:* ${isTransfer ? 'Transferencia (MP)' : 'Efectivo'}\n\n`;
             msg += "📍 *Dirección:* \n";
-            msg += "💬 _Adjunto comprobante si pago por transferencia._";
+            
+            if(isTransfer) {
+                msg += "⚠️ _Adjunto comprobante a continuación._";
+            }
 
             const phone = "5491161850833";
             const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
             window.open(url, '_blank');
         }
+
+        // Listener para actualizar totales al cambiar medio de pago
+        document.querySelectorAll('input[name="payment"]').forEach(radio => {
+            radio.addEventListener('change', updateUI);
+        });
 
         window.onload = () => renderMenu(menuData);
     </script>
