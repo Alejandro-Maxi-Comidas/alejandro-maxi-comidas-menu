@@ -8,76 +8,187 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; -webkit-tap-highlight-color: transparent; }
-        .category-btn.active { background-color: #1d3557; color: white; transform: scale(1.05); box-shadow: 0 4px 12px rgba(29, 53, 87, 0.3); }
-        .cart-drawer { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .category-btn.active {
+            background-color: #1d3557;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(29, 53, 87, 0.3);
+        }
+
+        .cart-drawer {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         .drawer-open { transform: translateY(0); }
         .drawer-closed { transform: translateY(100%); }
+
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .animate-slide-up { animation: slideUp 0.3s ease-out; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.3s ease-out;
+        }
     </style>
 </head>
 <body class="min-h-screen">
 
+    <!-- Header -->
     <header class="sticky top-0 z-40 bg-[#1d3557] text-white px-6 py-4 shadow-xl rounded-b-[2rem]">
         <div class="max-w-md mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-extrabold tracking-tight italic">MAXICOMIDAS</h1>
-            <span class="text-[10px] font-medium uppercase text-red-400">Lunes Cerrado</span>
+            <div>
+                <h1 class="text-2xl font-extrabold tracking-tight italic">MAXICOMIDAS</h1>
+                <p class="text-[10px] uppercase tracking-widest text-blue-200 font-bold">Sabor Casero & Delivery</p>
+            </div>
+            <div class="text-right">
+                <span class="block text-[10px] text-red-400 font-black uppercase">Lunes Cerrado</span>
+            </div>
         </div>
     </header>
 
-    <nav class="max-w-md mx-auto px-4 mt-6 overflow-x-auto no-scrollbar flex gap-3 py-2 sticky top-[72px] z-30 bg-gray-50/80 backdrop-blur-md">
-        <button onclick="filterItems('todos')" class="category-btn active px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap">Todos</button>
-        <button onclick="filterItems('hoy')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap">Hoy</button>
-        <button onclick="filterItems('pastas')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap">Pastas</button>
-        <button onclick="filterItems('milanesas')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap">Milanesas</button>
+    <!-- Info Section (Opcional, pero ayuda al usuario) -->
+    <div class="max-w-md mx-auto px-4 mt-4 space-y-2 text-center">
+        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">
+            <i class="fas fa-motorcycle mr-1"></i> Envío sin cargo • <i class="fas fa-university ml-2 mr-1"></i> Alias: MAXI.COM.ALE
+        </p>
+    </div>
+
+    <!-- Categorías -->
+    <nav class="max-w-md mx-auto px-4 mt-4 overflow-x-auto no-scrollbar flex gap-3 py-2 sticky top-[72px] z-30 bg-gray-50/80 backdrop-blur-md">
+        <button onclick="filterItems('todos')" class="category-btn active px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap transition-all">Todos</button>
+        <button onclick="filterItems('hoy')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap transition-all">Hoy</button>
+        <button onclick="filterItems('pastas')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap transition-all">Pastas</button>
+        <button onclick="filterItems('milanesas')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap transition-all">Milanesas</button>
+        <button onclick="filterItems('ensaladas')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border whitespace-nowrap transition-all">Ensaladas</button>
     </nav>
 
-    <main class="max-w-md mx-auto px-4 mt-4 pb-40 space-y-4" id="menu-grid"></main>
+    <!-- Lista de Productos -->
+    <main class="max-w-md mx-auto px-4 mt-4 pb-40 space-y-4" id="menu-grid">
+        <!-- Render dinámico -->
+    </main>
+
+    <!-- Resumen Carrito Flotante -->
+    <div id="cart-summary" class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md bg-[#1d3557] text-white rounded-[2rem] p-4 shadow-2xl flex items-center justify-between z-50 transform translate-y-32 transition-transform duration-500 cursor-pointer" onclick="toggleCartDrawer(true)">
+        <div class="flex items-center gap-3">
+            <div class="relative bg-white/10 p-2 rounded-xl">
+                <i class="fas fa-shopping-basket text-xl"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#1d3557]">0</span>
+            </div>
+            <div>
+                <p id="cart-text-qty" class="text-[10px] font-bold uppercase text-blue-200 tracking-wider">Ver mi pedido</p>
+                <p id="cart-text-total" class="font-black text-lg leading-tight tracking-tighter">$0</p>
+            </div>
+        </div>
+        <div class="bg-white/10 p-2 rounded-lg">
+            <i class="fas fa-chevron-up text-xs"></i>
+        </div>
+    </div>
+
+    <!-- Drawer Carrito (Detalle) -->
+    <div id="cart-drawer-overlay" class="fixed inset-0 bg-black/40 z-[60] hidden backdrop-blur-sm" onclick="toggleCartDrawer(false)"></div>
+    <div id="cart-drawer" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-[2.5rem] z-[70] cart-drawer drawer-closed max-h-[85vh] overflow-hidden flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
+        <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mt-4 mb-2"></div>
+        
+        <div class="px-6 py-4 flex justify-between items-center border-b border-gray-50">
+            <h2 class="text-xl font-extrabold text-gray-800 tracking-tighter">Mi Pedido</h2>
+            <button onclick="clearCart()" class="text-red-500 text-[10px] font-black uppercase tracking-widest bg-red-50 px-3 py-1 rounded-full">Vaciar</button>
+        </div>
+
+        <div id="cart-items-list" class="flex-1 overflow-y-auto px-6 py-4 space-y-3 no-scrollbar bg-gray-50/50">
+            <!-- Items del carrito aparecerán aquí -->
+        </div>
+
+        <div class="bg-white p-6 border-t border-gray-100 space-y-3">
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-400 font-bold uppercase text-[10px]">Transferencia / MP:</span>
+                <span id="total-mp" class="font-bold text-blue-600 text-lg">$0</span>
+            </div>
+            <div class="flex justify-between items-center bg-green-50 p-4 rounded-2xl border border-green-100">
+                <span class="text-green-800 font-black uppercase text-xs italic">Total Efectivo:</span>
+                <span id="total-cash" class="font-black text-green-700 text-2xl tracking-tighter">$0</span>
+            </div>
+            <button onclick="sendWhatsApp()" class="w-full bg-[#1d3557] text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 shadow-xl active:scale-95 transition-transform">
+                <i class="fab fa-whatsapp text-2xl"></i>
+                ENVIAR PEDIDO
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Guarniciones -->
+    <div id="side-modal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-end sm:items-center justify-center p-0 sm:p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-t-[2.5rem] sm:rounded-[2.5rem] p-8 shadow-2xl animate-slide-up">
+            <div class="text-center mb-6">
+                <div class="bg-orange-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-utensils text-2xl text-orange-500"></i>
+                </div>
+                <h3 class="text-xl font-black text-gray-800 tracking-tight">Elegí tu Guarnición</h3>
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Incluida en el precio</p>
+            </div>
+            <div class="grid grid-cols-1 gap-2" id="sides-grid">
+                <!-- Opciones de guarnición dinámicas -->
+            </div>
+            <button onclick="closeSideModal()" class="w-full mt-6 py-3 text-gray-300 font-black text-[10px] uppercase tracking-widest">Cerrar</button>
+        </div>
+    </div>
 
     <script>
-      /* MENU_JSON_START */
+        /* MENU_JSON_START */
         const menuData = [
-  { "id": 1, "name": "Guiso de lentejas", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": null },
-  { "id": 2, "name": "Pastel de bondiola y batatas", "cat": "hoy", "cash": 15000, "mp": 16000, "desc": "Bondiola al horno desmechada, puré batatas acaramelado", "side": null },
-  { "id": 3, "name": "Pollo al horno", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": "Guarnición" },
-  { "id": 4, "name": "Bife de costilla a la plancha", "cat": "hoy", "cash": 17000, "mp": 19000, "desc": "", "side": "Guarnición" },
-  { "id": 5, "name": "Ribs de cerdo con salsa barbacoa casera", "cat": "hoy", "cash": 22000, "mp": 24000, "desc": "", "side": "Guarnición" },
-  { "id": 6, "name": "Ojo de bife a la plancha", "cat": "hoy", "cash": 22000, "mp": 24000, "desc": "", "side": "Guarnición" },
-  { "id": 7, "name": "Pastel de papas", "cat": "hoy", "cash": 12000, "mp": 13000, "desc": "", "side": null },
-  { "id": 8, "name": "Pastel de calabaza espinaca y queso", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": null },
-  { "id": 9, "name": "Pechugas cubiertas con cebolla, morrón, verdeo, muzarrella y espárragos", "cat": "hoy", "cash": 15000, "mp": 16000, "desc": "", "side": "Guarnición" },
-  { "id": 10, "name": "Pechugas cubiertas con espinacas y queso", "cat": "hoy", "cash": 15000, "mp": 16000, "desc": "", "side": "Guarnición" },
-  { "id": 11, "name": "Pechugas caprese", "cat": "hoy", "cash": 15000, "mp": 16000, "desc": "Cubiertas con muzzarella, tomate y albahaca", "side": "Guarnición" },
-  { "id": 12, "name": "Pechugas a la plancha", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": "Guarnición" },
-  { "id": 13, "name": "Tarta de jamón, queso, tomate, albahaca", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": null },
-  { "id": 14, "name": "Tarta de espinaca y queso", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": null },
-  { "id": 15, "name": "Tomates rellenos con arroz y atún", "cat": "hoy", "cash": 12000, "mp": 13000, "desc": "", "side": null },
-  { "id": 16, "name": "Ensalada completa con jamón y queso", "cat": "ensaladas", "cash": 12000, "mp": 13000, "desc": "Lechuga, tomate, zanahoria, choclo, huevo, jamón y queso", "side": null },
-  { "id": 17, "name": "Ensalada completa con pollo", "cat": "ensaladas", "cash": 12000, "mp": 13000, "desc": "Lechuga, tomate, zanahoria, choclo, huevo y pollo grillado", "side": null },
-  { "id": 18, "name": "Ensalada completa con atun", "cat": "ensaladas", "cash": 12000, "mp": 13000, "desc": "Lechuga, tomate, zanahoria, choclo, huevo y atun", "side": null },
-  { "id": 19, "name": "Tallarines con salsa rosa o pesto", "cat": "pastas", "cash": 10000, "mp": 11000, "desc": "", "side": null },
-  { "id": 20, "name": "Tallarines con bolognesa", "cat": "pastas", "cash": 12000, "mp": 13000, "desc": "", "side": null },
-  { "id": 21, "name": "Ravioles de verdura y pollo o ricotta (fileto o rosa)", "cat": "pastas", "cash": 13000, "mp": 14000, "desc": "", "side": null },
-  { "id": 22, "name": "Ravioles de verdura y pollo o ricotta (bolognesa)", "cat": "pastas", "cash": 15000, "mp": 16000, "desc": "", "side": null },
-  { "id": 23, "name": "Canelones de espinaca (fileto o rosa)", "cat": "pastas", "cash": 13000, "mp": 14000, "desc": "", "side": null },
-  { "id": 24, "name": "Canelones de espinaca (bolognesa)", "cat": "pastas", "cash": 15000, "mp": 16000, "desc": "", "side": null },
-  { "id": 25, "name": "Lasagna de espinacas jamón y queso (fileto o rosa)", "cat": "pastas", "cash": 13000, "mp": 14000, "desc": "", "side": null },
-  { "id": 26, "name": "Lasagna de espinacas jamón y queso (bolognesa)", "cat": "pastas", "cash": 15000, "mp": 16000, "desc": "", "side": null },
-  { "id": 27, "name": "Capellettis de ricotta jamón y muzarrella (fileto o rosa)", "cat": "pastas", "cash": 14000, "mp": 15000, "desc": "", "side": null },
-  { "id": 28, "name": "Capellettis de ricotta jamón y muzarrella (bolognesa)", "cat": "pastas", "cash": 16000, "mp": 17000, "desc": "", "side": null },
-  { "id": 29, "name": "Sandwich completo de mila", "cat": "milanesas", "cash": 13000, "mp": 14000, "desc": "mila, lechuga, tomate, jamón queso y mayonesa", "side": null },
-  { "id": 30, "name": "Sandwich completo de mila con papas", "cat": "milanesas", "cash": 15000, "mp": 16000, "desc": "mila, lechuga, tomate, jamón queso y mayonesa", "side": "Papas" },
-  { "id": 31, "name": "Milanesa de ternera", "cat": "milanesas", "cash": 14000, "mp": 15000, "desc": "", "side": "Guarnición" },
-  { "id": 32, "name": "Milanesa napolitana", "cat": "milanesas", "cash": 16000, "mp": 17000, "desc": "", "side": "Guarnición" },
-  { "id": 33, "name": "Suprema de pollo", "cat": "milanesas", "cash": 14000, "mp": 15000, "desc": "", "side": "Guarnición" },
-  { "id": 34, "name": "Suprema napolitana", "cat": "milanesas", "cash": 16000, "mp": 17000, "desc": "", "side": "Guarnición" },
-  { "id": 35, "name": "Milanesa de peceto", "cat": "milanesas", "cash": 15000, "mp": 16000, "desc": "", "side": "Guarnición" },
-  { "id": 36, "name": "Milanesa de peceto napolitana", "cat": "milanesas", "cash": 17000, "mp": 18000, "desc": "", "side": "Guarnición" },
-  { "id": 37, "name": "Filet de merluza rebozado", "cat": "milanesas", "cash": 13000, "mp": 14000, "desc": "", "side": "Guarnición" }
-];
+            { "id": 1, "name": "Guiso de lentejas", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": false },
+            { "id": 2, "name": "Pastel de bondiola y batatas", "cat": "hoy", "cash": 15000, "mp": 16000, "desc": "Bondiola al horno desmechada, puré batatas acaramelado", "side": false },
+            { "id": 3, "name": "Pollo al horno", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "Pata y muslo", "side": true },
+            { "id": 4, "name": "Bife de costilla a la plancha", "cat": "hoy", "cash": 17000, "mp": 19000, "desc": "", "side": true },
+            { "id": 5, "name": "Ribs de cerdo con salsa barbacoa casera", "cat": "hoy", "cash": 22000, "mp": 24000, "desc": "", "side": true },
+            { "id": 6, "name": "Ojo de bife a la plancha", "cat": "hoy", "cash": 22000, "mp": 24000, "desc": "", "side": true },
+            { "id": 7, "name": "Pastel de papas", "cat": "hoy", "cash": 12000, "mp": 13000, "desc": "", "side": false },
+            { "id": 8, "name": "Pastel de calabaza espinaca y queso", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": false },
+            { "id": 9, "name": "Pechugas completas", "cat": "hoy", "cash": 15000, "mp": 16000, "desc": "Cebolla, morrón, verdeo, muzza y espárragos", "side": true },
+            { "id": 10, "name": "Pechugas con espinacas", "cat": "hoy", "cash": 15000, "mp": 16000, "desc": "Cubiertas con espinacas y queso", "side": true },
+            { "id": 11, "name": "Pechugas caprese", "cat": "hoy", "cash": 15000, "mp": 16000, "desc": "Muzzarella, tomate y albahaca", "side": true },
+            { "id": 12, "name": "Pechugas a la plancha", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": true },
+            { "id": 13, "name": "Tarta de jamón, queso, tomate, albahaca", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": false },
+            { "id": 14, "name": "Tarta de espinaca y queso", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": false },
+            { "id": 15, "name": "Tomates rellenos con arroz y atún", "cat": "hoy", "cash": 12000, "mp": 13000, "desc": "", "side": false },
+            { "id": 16, "name": "Ensalada completa con jamón y queso", "cat": "ensaladas", "cash": 12000, "mp": 13000, "desc": "Lechuga, tomate, zanahoria, choclo, huevo", "side": false },
+            { "id": 17, "name": "Ensalada completa con pollo", "cat": "ensaladas", "cash": 12000, "mp": 13000, "desc": "Lechuga, tomate, zanahoria, choclo, huevo", "side": false },
+            { "id": 18, "name": "Ensalada completa con atun", "cat": "ensaladas", "cash": 12000, "mp": 13000, "desc": "Lechuga, tomate, zanahoria, choclo, huevo", "side": false },
+            { "id": 19, "name": "Tallarines con salsa rosa o pesto", "cat": "pastas", "cash": 10000, "mp": 11000, "desc": "", "side": false },
+            { "id": 20, "name": "Tallarines con bolognesa", "cat": "pastas", "cash": 12000, "mp": 13000, "desc": "", "side": false },
+            { "id": 21, "name": "Ravioles (fileto o rosa)", "cat": "pastas", "cash": 13000, "mp": 14000, "desc": "Verdura y pollo o ricotta", "side": false },
+            { "id": 22, "name": "Ravioles (bolognesa)", "cat": "pastas", "cash": 15000, "mp": 16000, "desc": "", "side": false },
+            { "id": 23, "name": "Canelones de espinaca (fileto o rosa)", "cat": "pastas", "cash": 13000, "mp": 14000, "desc": "", "side": false },
+            { "id": 24, "name": "Canelones de espinaca (bolognesa)", "cat": "pastas", "cash": 15000, "mp": 16000, "desc": "", "side": false },
+            { "id": 25, "name": "Lasagna de espinacas (fileto o rosa)", "cat": "pastas", "cash": 13000, "mp": 14000, "desc": "", "side": false },
+            { "id": 26, "name": "Lasagna de espinacas (bolognesa)", "cat": "pastas", "cash": 15000, "mp": 16000, "desc": "", "side": false },
+            { "id": 27, "name": "Capellettis (fileto o rosa)", "cat": "pastas", "cash": 14000, "mp": 15000, "desc": "Ricotta jamón y muzzarrella", "side": false },
+            { "id": 28, "name": "Capellettis (bolognesa)", "cat": "pastas", "cash": 16000, "mp": 17000, "desc": "", "side": false },
+            { "id": 29, "name": "Sandwich completo de mila", "cat": "milanesas", "cash": 13000, "mp": 14000, "desc": "Lechuga, tomate, jamón queso", "side": false },
+            { "id": 30, "name": "Sandwich completo de mila con papas", "cat": "milanesas", "cash": 15000, "mp": 16000, "desc": "Con papas fritas", "side": false },
+            { "id": 31, "name": "Milanesa de ternera", "cat": "milanesas", "cash": 14000, "mp": 15000, "desc": "", "side": true },
+            { "id": 32, "name": "Milanesa napolitana", "cat": "milanesas", "cash": 16000, "mp": 17000, "desc": "", "side": true },
+            { "id": 33, "name": "Suprema de pollo", "cat": "milanesas", "cash": 14000, "mp": 15000, "desc": "", "side": true },
+            { "id": 34, "name": "Suprema napolitana", "cat": "milanesas", "cash": 16000, "mp": 17000, "desc": "", "side": true },
+            { "id": 35, "name": "Milanesa de peceto", "cat": "milanesas", "cash": 15000, "mp": 16000, "desc": "", "side": true },
+            { "id": 36, "name": "Peceto napolitana", "cat": "milanesas", "cash": 17000, "mp": 18000, "desc": "", "side": true },
+            { "id": 37, "name": "Filet de merluza rebozado", "cat": "milanesas", "cash": 13000, "mp": 14000, "desc": "", "side": true }
+        ];
         /* MENU_JSON_END */
+
+        const sideOptions = ["Papas en cubos", "Papas Fritas", "Puré de Papas", "Puré de Calabaza", "Puré Mixto", "Arroz", "Papa, Huevo y Mayo", "Ensalada Mixta"];
+        
+        let cart = [];
+        let pendingItem = null;
 
         function renderMenu(items) {
             const grid = document.getElementById('menu-grid');
@@ -86,15 +197,22 @@
                 grid.innerHTML += `
                     <div class="bg-white rounded-3xl p-4 border border-gray-100 shadow-sm flex items-center gap-4 animate-slide-up">
                         <div class="flex-1">
-                            <span class="text-[8px] font-black uppercase text-blue-500 bg-blue-50 px-2 py-0.5 rounded-md mb-1 inline-block">${item.cat}</span>
+                            <span class="text-[8px] font-black uppercase text-blue-500 bg-blue-50 px-2 py-0.5 rounded-md mb-1 inline-block italic">${item.cat}</span>
                             <h3 class="text-gray-900 font-extrabold text-sm leading-tight mb-1">${item.name}</h3>
-                            <p class="text-[10px] text-gray-400 font-medium mb-3 italic">${item.desc}</p>
+                            <p class="text-[10px] text-gray-400 font-medium mb-3 italic line-clamp-1">${item.desc || 'Sin descripción'}</p>
                             <div class="flex items-center gap-4">
-                                <p class="text-base font-black text-gray-800">$${item.cash.toLocaleString()}</p>
-                                <p class="text-[9px] text-gray-400">Transfer: $${item.mp.toLocaleString()}</p>
+                                <div>
+                                    <p class="text-[8px] text-green-600 font-black uppercase italic leading-none">Efectivo</p>
+                                    <p class="text-base font-black text-gray-800 tracking-tighter">$${item.cash.toLocaleString()}</p>
+                                </div>
+                                <div class="w-px h-6 bg-gray-100"></div>
+                                <div>
+                                    <p class="text-[8px] text-blue-400 font-black uppercase italic leading-none">Transfer</p>
+                                    <p class="text-xs font-bold text-gray-400">$${item.mp.toLocaleString()}</p>
+                                </div>
                             </div>
                         </div>
-                        <button onclick="alert('Funcionalidad de carrito aquí')" class="bg-[#1d3557] text-white w-12 h-12 rounded-2xl flex items-center justify-center">
+                        <button onclick="handleAddToCart(${item.id})" class="bg-[#1d3557] active:bg-green-500 text-white w-12 h-12 rounded-2xl shadow-lg transition-all active:scale-90 flex items-center justify-center shrink-0">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
@@ -102,8 +220,139 @@
             });
         }
 
+        function handleAddToCart(id) {
+            const item = menuData.find(i => i.id === id);
+            if (item.side) {
+                pendingItem = item;
+                openSideModal();
+            } else {
+                addToCart(item);
+            }
+        }
+
+        function openSideModal() {
+            const grid = document.getElementById('sides-grid');
+            grid.innerHTML = '';
+            sideOptions.forEach(s => {
+                grid.innerHTML += `
+                    <button onclick="selectSide('${s}')" class="w-full py-3 px-6 bg-gray-50 border border-gray-100 rounded-2xl text-left font-bold text-gray-700 active:bg-blue-50 transition-all text-sm">
+                        ${s}
+                    </button>
+                `;
+            });
+            document.getElementById('side-modal').classList.remove('hidden');
+        }
+
+        function closeSideModal() { 
+            document.getElementById('side-modal').classList.add('hidden'); 
+            pendingItem = null;
+        }
+
+        function selectSide(sideName) {
+            addToCart({ ...pendingItem, cartId: Date.now(), selectedSide: sideName });
+            closeSideModal();
+        }
+
+        function addToCart(item) {
+            cart.push(item.cartId ? item : { ...item, cartId: Date.now() });
+            updateUI();
+        }
+
+        function removeFromCart(cartId) {
+            cart = cart.filter(i => i.cartId !== cartId);
+            updateUI();
+            if(cart.length === 0) toggleCartDrawer(false);
+        }
+
+        function clearCart() { 
+            cart = []; 
+            updateUI(); 
+            toggleCartDrawer(false); 
+        }
+
+        function updateUI() {
+            const summary = document.getElementById('cart-summary');
+            const badge = document.getElementById('cart-badge');
+            const textTotal = document.getElementById('cart-text-total');
+            const textQty = document.getElementById('cart-text-qty');
+
+            if (cart.length > 0) {
+                summary.classList.remove('translate-y-32');
+                badge.innerText = cart.length;
+                const total = cart.reduce((acc, i) => acc + i.cash, 0);
+                textTotal.innerText = `$${total.toLocaleString()}`;
+                textQty.innerText = `${cart.length} ${cart.length === 1 ? 'Producto' : 'Productos'}`;
+            } else {
+                summary.classList.add('translate-y-32');
+            }
+
+            const list = document.getElementById('cart-items-list');
+            const totalMpDisplay = document.getElementById('total-mp');
+            const totalCashDisplay = document.getElementById('total-cash');
+            
+            list.innerHTML = '';
+            let tMp = 0; let tCash = 0;
+
+            cart.forEach(item => {
+                tMp += item.mp; tCash += item.cash;
+                list.innerHTML += `
+                    <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-800 text-xs">${item.name}</h4>
+                            ${item.selectedSide ? `<p class="text-[9px] text-blue-500 font-bold uppercase italic mt-0.5">Guarnición: ${item.selectedSide}</p>` : ''}
+                            <p class="text-[10px] font-black text-green-600 mt-1">$${item.cash.toLocaleString()}</p>
+                        </div>
+                        <button onclick="removeFromCart(${item.cartId})" class="text-gray-300 p-2 active:text-red-500">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                `;
+            });
+
+            totalMpDisplay.innerText = `$${tMp.toLocaleString()}`;
+            totalCashDisplay.innerText = `$${tCash.toLocaleString()}`;
+        }
+
+        function toggleCartDrawer(show) {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('cart-drawer-overlay');
+            if (show && cart.length > 0) {
+                drawer.classList.replace('drawer-closed', 'drawer-open');
+                overlay.classList.remove('hidden');
+            } else {
+                drawer.classList.replace('drawer-open', 'drawer-closed');
+                overlay.classList.add('hidden');
+            }
+        }
+
         function filterItems(cat) {
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
             renderMenu(cat === 'todos' ? menuData : menuData.filter(i => i.cat === cat));
+        }
+
+        function sendWhatsApp() {
+            if (cart.length === 0) return;
+            
+            let msg = "*PEDIDO - MAXICOMIDAS*\n";
+            msg += "----------------------------\n";
+            cart.forEach(i => {
+                msg += `• *${i.name}*\n`;
+                if(i.selectedSide) msg += `  _Guarnición: ${i.selectedSide}_\n`;
+            });
+            msg += "----------------------------\n";
+            
+            const cashTotal = cart.reduce((a, b) => a + b.cash, 0);
+            const mpTotal = cart.reduce((a, b) => a + b.mp, 0);
+            
+            msg += `💰 *TOTAL EFECTIVO: $${cashTotal.toLocaleString()}*\n`;
+            msg += `📱 *TOTAL TRANSFERENCIA: $${mpTotal.toLocaleString()}*\n\n`;
+            msg += "📍 *Dirección:* \n";
+            msg += "💬 _Adjunto comprobante si pago por transferencia._";
+
+            const phone = "5491161850833";
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
         }
 
         window.onload = () => renderMenu(menuData);
