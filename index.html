@@ -38,8 +38,46 @@
 
     <script>
       /* MENU_JSON_START */
-      const menuData = []; 
-      /* MENU_JSON_END */
+        const menuData = [
+  { "id": 1, "name": "Guiso de lentejas", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": null },
+  { "id": 2, "name": "Pastel de bondiola y batatas", "cat": "hoy", "cash": 15000, "mp": 16000, "desc": "Bondiola al horno desmechada, puré batatas acaramelado", "side": null },
+  { "id": 3, "name": "Pollo al horno", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": "Guarnición" },
+  { "id": 4, "name": "Bife de costilla a la plancha", "cat": "hoy", "cash": 17000, "mp": 19000, "desc": "", "side": "Guarnición" },
+  { "id": 5, "name": "Ribs de cerdo con salsa barbacoa casera", "cat": "hoy", "cash": 22000, "mp": 24000, "desc": "", "side": "Guarnición" },
+  { "id": 6, "name": "Ojo de bife a la plancha", "cat": "hoy", "cash": 22000, "mp": 24000, "desc": "", "side": "Guarnición" },
+  { "id": 7, "name": "Pastel de papas", "cat": "hoy", "cash": 12000, "mp": 13000, "desc": "", "side": null },
+  { "id": 8, "name": "Pastel de calabaza espinaca y queso", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": null },
+  { "id": 9, "name": "Pechugas cubiertas con cebolla, morrón, verdeo, muzarrella y espárragos", "cat": "hoy", "cash": 15000, "mp": 16000, "desc": "", "side": "Guarnición" },
+  { "id": 10, "name": "Pechugas cubiertas con espinacas y queso", "cat": "hoy", "cash": 15000, "mp": 16000, "desc": "", "side": "Guarnición" },
+  { "id": 11, "name": "Pechugas caprese", "cat": "hoy", "cash": 15000, "mp": 16000, "desc": "Cubiertas con muzzarella, tomate y albahaca", "side": "Guarnición" },
+  { "id": 12, "name": "Pechugas a la plancha", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": "Guarnición" },
+  { "id": 13, "name": "Tarta de jamón, queso, tomate, albahaca", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": null },
+  { "id": 14, "name": "Tarta de espinaca y queso", "cat": "hoy", "cash": 13000, "mp": 14000, "desc": "", "side": null },
+  { "id": 15, "name": "Tomates rellenos con arroz y atún", "cat": "hoy", "cash": 12000, "mp": 13000, "desc": "", "side": null },
+  { "id": 16, "name": "Ensalada completa con jamón y queso", "cat": "ensaladas", "cash": 12000, "mp": 13000, "desc": "Lechuga, tomate, zanahoria, choclo, huevo, jamón y queso", "side": null },
+  { "id": 17, "name": "Ensalada completa con pollo", "cat": "ensaladas", "cash": 12000, "mp": 13000, "desc": "Lechuga, tomate, zanahoria, choclo, huevo y pollo grillado", "side": null },
+  { "id": 18, "name": "Ensalada completa con atun", "cat": "ensaladas", "cash": 12000, "mp": 13000, "desc": "Lechuga, tomate, zanahoria, choclo, huevo y atun", "side": null },
+  { "id": 19, "name": "Tallarines con salsa rosa o pesto", "cat": "pastas", "cash": 10000, "mp": 11000, "desc": "", "side": null },
+  { "id": 20, "name": "Tallarines con bolognesa", "cat": "pastas", "cash": 12000, "mp": 13000, "desc": "", "side": null },
+  { "id": 21, "name": "Ravioles de verdura y pollo o ricotta (fileto o rosa)", "cat": "pastas", "cash": 13000, "mp": 14000, "desc": "", "side": null },
+  { "id": 22, "name": "Ravioles de verdura y pollo o ricotta (bolognesa)", "cat": "pastas", "cash": 15000, "mp": 16000, "desc": "", "side": null },
+  { "id": 23, "name": "Canelones de espinaca (fileto o rosa)", "cat": "pastas", "cash": 13000, "mp": 14000, "desc": "", "side": null },
+  { "id": 24, "name": "Canelones de espinaca (bolognesa)", "cat": "pastas", "cash": 15000, "mp": 16000, "desc": "", "side": null },
+  { "id": 25, "name": "Lasagna de espinacas jamón y queso (fileto o rosa)", "cat": "pastas", "cash": 13000, "mp": 14000, "desc": "", "side": null },
+  { "id": 26, "name": "Lasagna de espinacas jamón y queso (bolognesa)", "cat": "pastas", "cash": 15000, "mp": 16000, "desc": "", "side": null },
+  { "id": 27, "name": "Capellettis de ricotta jamón y muzarrella (fileto o rosa)", "cat": "pastas", "cash": 14000, "mp": 15000, "desc": "", "side": null },
+  { "id": 28, "name": "Capellettis de ricotta jamón y muzarrella (bolognesa)", "cat": "pastas", "cash": 16000, "mp": 17000, "desc": "", "side": null },
+  { "id": 29, "name": "Sandwich completo de mila", "cat": "milanesas", "cash": 13000, "mp": 14000, "desc": "mila, lechuga, tomate, jamón queso y mayonesa", "side": null },
+  { "id": 30, "name": "Sandwich completo de mila con papas", "cat": "milanesas", "cash": 15000, "mp": 16000, "desc": "mila, lechuga, tomate, jamón queso y mayonesa", "side": "Papas" },
+  { "id": 31, "name": "Milanesa de ternera", "cat": "milanesas", "cash": 14000, "mp": 15000, "desc": "", "side": "Guarnición" },
+  { "id": 32, "name": "Milanesa napolitana", "cat": "milanesas", "cash": 16000, "mp": 17000, "desc": "", "side": "Guarnición" },
+  { "id": 33, "name": "Suprema de pollo", "cat": "milanesas", "cash": 14000, "mp": 15000, "desc": "", "side": "Guarnición" },
+  { "id": 34, "name": "Suprema napolitana", "cat": "milanesas", "cash": 16000, "mp": 17000, "desc": "", "side": "Guarnición" },
+  { "id": 35, "name": "Milanesa de peceto", "cat": "milanesas", "cash": 15000, "mp": 16000, "desc": "", "side": "Guarnición" },
+  { "id": 36, "name": "Milanesa de peceto napolitana", "cat": "milanesas", "cash": 17000, "mp": 18000, "desc": "", "side": "Guarnición" },
+  { "id": 37, "name": "Filet de merluza rebozado", "cat": "milanesas", "cash": 13000, "mp": 14000, "desc": "", "side": "Guarnición" }
+];
+        /* MENU_JSON_END */
 
         function renderMenu(items) {
             const grid = document.getElementById('menu-grid');
