@@ -186,23 +186,23 @@
             horarios: "Mar a Dom 11-15hs / 19-22:30hs",
             estado: "Lunes Cerrado",
             categorias: [
-                { id: "todos", label: "Todos" },
                 { id: "hoy", label: "Hoy" },
                 { id: "pastas", label: "Pastas" },
-                { id: "milanesas", label: "Milanesas" }
+                { id: "milanesas", label: "Milanesas" },
+                { id: "ensaladas", label: "Ensaladas" }
             ],
             guarniciones: ["Papas en cubos", "Papas Fritas", "Puré de Papas", "Puré de Calabaza", "Puré Mixto", "Arroz", "Ensalada"]
         };
 
         const menuData = [
-            {"id":1,"name":"Pastel de bondiola","cat":"hoy","cash":15000,"mp":16000,"desc":"Bondiola desmechada, puré batatas acaramelado","side":false},
-            {"id":2,"name":"Pollo al horno","cat":"hoy","cash":13000,"mp":14000,"desc":"Pollo al horno con guarnición","side":true},
-            {"id":3,"name":"Bife de costilla","cat":"hoy","cash":17000,"mp":19000,"desc":"Bife de costilla a la plancha","side":true},
-            {"id":4,"name":"Ribs de cerdo","cat":"hoy","cash":22000,"mp":24000,"desc":"Salsa barbacoa casera","side":true},
-            {"id":5,"name":"Milanesa de ternera","cat":"milanesas","cash":14000,"mp":15000,"desc":"Milanesa de ternera con guarnición","side":true},
-            {"id":6,"name":"Suprema de pollo","cat":"milanesas","cash":14000,"mp":15000,"desc":"Suprema de pollo con guarnición","side":true},
-            {"id":7,"name":"Tallarines","cat":"pastas","cash":10000,"mp":11000,"desc":"Con salsa rosa o pesto","side":false},
-            {"id":8,"name":"Ravioles","cat":"pastas","cash":13000,"mp":14000,"desc":"Verdura/pollo o ricotta, salsa fileto o rosa","side":false}
+            {"id":1,"name":"Guiso de lentejas","cat":"hoy","cash":13000,"mp":14000,"desc":"Guiso de lentejas","side":false},
+            {"id":2,"name":"Pastel de bondiola","cat":"hoy","cash":15000,"mp":16000,"desc":"Bondiola desmechada, puré batatas","side":false},
+            {"id":3,"name":"Pollo al horno","cat":"hoy","cash":13000,"mp":14000,"desc":"Pollo al horno","side":true},
+            {"id":4,"name":"Bife de costilla","cat":"hoy","cash":17000,"mp":19000,"desc":"Bife de costilla a la plancha","side":true},
+            {"id":5,"name":"Ribs de cerdo","cat":"hoy","cash":22000,"mp":24000,"desc":"Con salsa barbacoa casera","side":true},
+            {"id":6,"name":"Tallarines","cat":"pastas","cash":10000,"mp":11000,"desc":"Salsa rosa o pesto","side":false},
+            {"id":7,"name":"Milanesa de ternera","cat":"milanesas","cash":14000,"mp":15000,"desc":"Milanesa de ternera","side":true},
+            {"id":8,"name":"Ensalada completa","cat":"ensaladas","cash":12000,"mp":13000,"desc":"Con jamón y queso","side":false}
         ];
 
         let cart = [];
@@ -222,8 +222,7 @@
                 btn.onclick = (e) => filterItems(cat.id, e.target);
                 nav.appendChild(btn);
             });
-
-            renderMenu(menuData);
+            renderMenu(menuData.filter(i => i.cat === CONFIG.categorias[0].id));
         }
 
         function renderMenu(items) {
