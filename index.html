@@ -75,11 +75,11 @@
             <div class="grid grid-cols-2 gap-3 mt-4">
                 <div class="bg-white/10 rounded-2xl p-3 border border-white/5">
                     <p class="text-[9px] uppercase font-black text-blue-300 mb-1">Transferencias</p>
-                    <p id="alias-display" class="text-xs font-bold truncate">---</p>
+                    <p id="alias-display" class="text-xs font-bold truncate">MAXI.COM.ALE</p>
                 </div>
                 <div class="bg-white/10 rounded-2xl p-3 border border-white/5">
                     <p class="text-[9px] uppercase font-black text-red-300 mb-1">Horarios</p>
-                    <p id="hours-display" class="text-xs font-bold">---</p>
+                    <p id="hours-display" class="text-xs font-bold">Mar a Dom 11-15hs, 19-22:30hs</p>
                 </div>
             </div>
         </div>
@@ -90,7 +90,7 @@
         <div class="bg-white rounded-full shadow-lg py-2.5 px-4 flex justify-between items-center text-[10px] font-black text-gray-500 uppercase tracking-tight border border-gray-100">
             <span><i class="fas fa-motorcycle text-blue-500 mr-1"></i> Envío sin cargo</span>
             <span class="w-px h-3 bg-gray-200"></span>
-            <span id="status-pill" class="text-red-500">Cargando...</span>
+            <span id="status-pill" class="text-red-500">LUNES CERRADO</span>
         </div>
     </div>
 
@@ -175,16 +175,19 @@
                 <h3 class="text-xl font-black text-gray-800 tracking-tight">Elegí tu Guarnición</h3>
             </div>
             <div class="grid grid-cols-1 gap-2" id="sides-grid"></div>
-            <button onclick="closeSideModal()" class="w-full mt-6 py-3 text-gray-300 font-black text-[10px] uppercase tracking-widest">Cerrar</button>
+            <button onclick="closeSideModal()" class="w-full mt-6 py-4 px-6 bg-gray-50 border border-gray-100 rounded-2xl text-left font-bold text-gray-700 active:bg-blue-50 transition-all text-sm">Cerrar</button>
         </div>
     </div>
 
     <script>
+        /*******************************************************
+         * 1. CONFIGURACIÓN DEL NEGOCIO (EDITAR AQUÍ)
+         *******************************************************/
         const CONFIG = {
             whatsapp: "5491161850833",
             alias: "MAXI.COM.ALE",
-            horarios: "Mar a Dom 10:30-14:30 / 19:00-22:30",
-            estado: "Lunes Cerrado",
+            horarios: "Mar a Dom 11-15hs, 19-22:30hs",
+            estado: "LUNES CERRADO",
             categorias: [
                 { id: "todos", label: "Todos" },
                 { id: "hoy", label: "Hoy" },
@@ -192,202 +195,35 @@
                 { id: "milanesas", label: "Milanesas" },
                 { id: "ensaladas", label: "Ensaladas" }
             ],
-            guarniciones: ["Papas en cubos", "Papas Fritas", "Puré de Papas", "Puré de Calabaza", "Puré Mixto", "Arroz", "Papa, huevo y mayonesa", "Ensalada"]
+            guarniciones: ["Papas en cubos", "Papas Fritas", "Puré de Papas", "Puré de Calabaza", "Puré Mixto", "Arroz", "Ensalada Mixta"]
         };
 
+        /*******************************************************
+         * 2. BASE DE DATOS DE PRODUCTOS (EDITAR AQUÍ)
+         *******************************************************/
         const menuData = [
-            {"id":1,"name":"Guiso de lentejas","cat":"hoy","cash":13000,"mp":14000,"desc":"Guiso de lentejas","side":false},
-            {"id":2,"name":"Pastel de bondiola y batatas","cat":"hoy","cash":15000,"mp":16000,"desc":"Bondiola desmechada, puré batatas acaramelado","side":false},
-            {"id":3,"name":"Pollo al horno","cat":"hoy","cash":13000,"mp":14000,"desc":"Pollo al horno","side":true},
-            {"id":4,"name":"Bife de costilla","cat":"hoy","cash":17000,"mp":19000,"desc":"Bife de costilla a la plancha","side":true},
-            {"id":5,"name":"Ribs de cerdo BBQ","cat":"hoy","cash":22000,"mp":24000,"desc":"Salsa barbacoa casera","side":true},
-            {"id":6,"name":"Ojo de bife","cat":"hoy","cash":22000,"mp":24000,"desc":"Ojo de bife a la plancha","side":true},
-            {"id":7,"name":"Pastel de papas","cat":"hoy","cash":12000,"mp":13000,"desc":"Pastel de papas","side":false},
-            {"id":8,"name":"Pastel de calabaza, espinaca y queso","cat":"hoy","cash":13000,"mp":14000,"desc":"Pastel de calabaza, espinaca y queso","side":false},
-            {"id":9,"name":"Pechugas con vegetales y muzzarella","cat":"hoy","cash":15000,"mp":16000,"desc":"Cebolla, morrón, verdeo, muzzarella y espárragos","side":true},
-            {"id":10,"name":"Pechugas con espinacas y queso","cat":"hoy","cash":15000,"mp":16000,"desc":"Pechugas cubiertas con espinacas y queso","side":true},
-            {"id":11,"name":"Pechugas caprese","cat":"hoy","cash":15000,"mp":16000,"desc":"Muzzarella, tomate y albahaca","side":true},
-            {"id":12,"name":"Pechugas a la plancha","cat":"hoy","cash":13000,"mp":14000,"desc":"Pechugas a la plancha","side":true},
-            {"id":13,"name":"Tarta de jamón, queso, tomate, albahaca","cat":"hoy","cash":13000,"mp":14000,"desc":"Tarta casera","side":false},
-            {"id":14,"name":"Tarta de espinaca y queso","cat":"hoy","cash":13000,"mp":14000,"desc":"Tarta casera","side":false},
-            {"id":15,"name":"Tomates rellenos","cat":"hoy","cash":12000,"mp":13000,"desc":"Con arroz y atún","side":false},
-            {"id":16,"name":"Ensalada completa con jamón y queso","cat":"ensaladas","cash":12000,"mp":13000,"desc":"Lechuga, tomate, zanahoria, choclo, huevo, jamón y queso","side":false},
-            {"id":17,"name":"Ensalada completa con pollo","cat":"ensaladas","cash":12000,"mp":13000,"desc":"Lechuga, tomate, zanahoria, choclo, huevo y pollo grillado","side":false},
-            {"id":18,"name":"Ensalada completa con atún","cat":"ensaladas","cash":12000,"mp":13000,"desc":"Lechuga, tomate, zanahoria, choclo, huevo y atún","side":false},
-            {"id":19,"name":"Tallarines (Salsa rosa o pesto)","cat":"pastas","cash":10000,"mp":11000,"desc":"Tallarines caseros","side":false},
-            {"id":20,"name":"Tallarines (Bolognesa)","cat":"pastas","cash":12000,"mp":13000,"desc":"Tallarines caseros","side":false},
-            {"id":21,"name":"Ravioles (Fileto o rosa)","cat":"pastas","cash":13000,"mp":14000,"desc":"Verdura/pollo o ricotta","side":false},
-            {"id":22,"name":"Ravioles (Bolognesa)","cat":"pastas","cash":15000,"mp":16000,"desc":"Verdura/pollo o ricotta","side":false},
-            {"id":23,"name":"Canelones (Fileto o rosa)","cat":"pastas","cash":13000,"mp":14000,"desc":"Espinaca","side":false},
-            {"id":24,"name":"Canelones (Bolognesa)","cat":"pastas","cash":15000,"mp":16000,"desc":"Espinaca","side":false},
-            {"id":25,"name":"Lasagna (Fileto o rosa)","cat":"pastas","cash":13000,"mp":14000,"desc":"Espinacas, jamón y queso","side":false},
-            {"id":26,"name":"Lasagna (Bolognesa)","cat":"pastas","cash":15000,"mp":16000,"desc":"Espinacas, jamón y queso","side":false},
-            {"id":27,"name":"Capellettis (Fileto o rosa)","cat":"pastas","cash":14000,"mp":15000,"desc":"Ricotta, jamón y muzzarella","side":false},
-            {"id":28,"name":"Capellettis (Bolognesa)","cat":"pastas","cash":16000,"mp":17000,"desc":"Ricotta, jamón y muzzarella","side":false},
-            {"id":29,"name":"Sandwich completo de mila","cat":"milanesas","cash":13000,"mp":14000,"desc":"Lechuga, tomate, jamón, queso y mayonesa","side":false},
-            {"id":30,"name":"Sandwich completo de mila con papas","cat":"milanesas","cash":15000,"mp":16000,"desc":"Lechuga, tomate, jamón, queso, mayonesa y papas","side":false},
-            {"id":31,"name":"Milanesa de ternera","cat":"milanesas","cash":14000,"mp":15000,"desc":"Milanesa de ternera","side":true},
-            {"id":32,"name":"Milanesa napolitana","cat":"milanesas","cash":16000,"mp":17000,"desc":"Milanesa napolitana","side":true},
-            {"id":33,"name":"Suprema de pollo","cat":"milanesas","cash":14000,"mp":15000,"desc":"Suprema de pollo","side":true},
-            {"id":34,"name":"Suprema napolitana","cat":"milanesas","cash":16000,"mp":17000,"desc":"Suprema napolitana","side":true},
-            {"id":35,"name":"Milanesa de peceto","cat":"milanesas","cash":15000,"mp":16000,"desc":"Milanesa de peceto","side":true},
-            {"id":36,"name":"Milanesa de peceto napolitana","cat":"milanesas","cash":17000,"mp":18000,"desc":"Milanesa de peceto napolitana","side":true},
-            {"id":37,"name":"Filet de merluza rebozado","cat":"milanesas","cash":13000,"mp":14000,"desc":"Filet de merluza","side":true}
-        ];
-
-        let cart = [];
-        let pendingItem = null;
-
-        function initApp() {
-            document.getElementById('alias-display').innerText = `Alias: ${CONFIG.alias}`;
-            document.getElementById('hours-display').innerText = CONFIG.horarios;
-            document.getElementById('status-pill').innerText = CONFIG.estado;
-            document.getElementById('header-whatsapp').href = `https://wa.me/${CONFIG.whatsapp}?text=Hola!%20Quiero%20hacer%20un%20pedido.`;
-            
-            const nav = document.getElementById('category-nav');
-            CONFIG.categorias.forEach((cat, idx) => {
-                const btn = document.createElement('button');
-                btn.className = `category-btn ${idx === 0 ? 'active' : ''} px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border border-gray-100 whitespace-nowrap transition-all`;
-                btn.innerText = cat.label;
-                btn.onclick = (e) => filterItems(cat.id, e.target);
-                nav.appendChild(btn);
-            });
-
-            renderMenu(menuData);
-        }
-
-        function renderMenu(items) {
-            const grid = document.getElementById('menu-grid');
-            grid.innerHTML = '';
-            items.forEach(item => {
-                grid.innerHTML += `
-                    <div class="bg-white rounded-3xl p-4 border border-gray-100 shadow-sm flex items-center gap-4 animate-slide-up">
-                        <div class="flex-1">
-                            <span class="text-[8px] font-black uppercase text-blue-500 bg-blue-50 px-2 py-0.5 rounded-md mb-1 inline-block italic">${item.cat}</span>
-                            <h3 class="text-gray-900 font-extrabold text-sm leading-tight mb-1">${item.name}</h3>
-                            <p class="text-[10px] text-gray-400 font-medium mb-3 italic line-clamp-1">${item.desc}</p>
-                            <div class="flex items-center gap-4">
-                                <div>
-                                    <p class="text-[8px] text-green-600 font-black uppercase italic leading-none">Efectivo</p>
-                                    <p class="text-base font-black text-gray-800 tracking-tighter">$${item.cash.toLocaleString()}</p>
-                                </div>
-                                <div class="w-px h-6 bg-gray-100"></div>
-                                <div>
-                                    <p class="text-[8px] text-blue-400 font-black uppercase italic leading-none">Transfer</p>
-                                    <p class="text-xs font-bold text-gray-400">$${item.mp.toLocaleString()}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <button onclick="handleAddToCart(${item.id})" class="bg-[#1d3557] active:bg-green-500 text-white w-12 h-12 rounded-2xl shadow-lg transition-all active:scale-90 flex items-center justify-center shrink-0">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                `;
-            });
-        }
-
-        function handleAddToCart(id) {
-            const item = menuData.find(i => i.id === id);
-            if (item.side) {
-                pendingItem = item;
-                const grid = document.getElementById('sides-grid');
-                grid.innerHTML = '';
-                CONFIG.guarniciones.forEach(s => {
-                    grid.innerHTML += `<button onclick="selectSide('${s}')" class="w-full py-4 px-6 bg-gray-50 border border-gray-100 rounded-2xl text-left font-bold text-gray-700 active:bg-blue-50 transition-all text-sm">${s}</button>`;
-                });
-                document.getElementById('side-modal').classList.remove('hidden');
-            } else {
-                addToCart(item);
-            }
-        }
-
-        function selectSide(side) {
-            addToCart({ ...pendingItem, cartId: Date.now(), selectedSide: side });
-            document.getElementById('side-modal').classList.add('hidden');
-            pendingItem = null;
-        }
-
-        function closeSideModal() { document.getElementById('side-modal').classList.add('hidden'); }
-
-        function addToCart(item) {
-            cart.push(item.cartId ? item : { ...item, cartId: Date.now() });
-            updateUI();
-        }
-
-        function removeFromCart(cartId) {
-            cart = cart.filter(i => i.cartId !== cartId);
-            updateUI();
-            if(cart.length === 0) toggleCartDrawer(false);
-        }
-
-        function clearCart() { cart = []; updateUI(); toggleCartDrawer(false); }
-
-        function updateUI() {
-            const isTransfer = document.getElementById('pay-transfer').checked;
-            const badge = document.getElementById('cart-badge');
-            const summary = document.getElementById('cart-summary');
-            const totalDisplay = document.getElementById('cart-text-total');
-            const drawerTotal = document.getElementById('drawer-total-display');
-
-            const total = cart.reduce((acc, i) => acc + (isTransfer ? i.mp : i.cash), 0);
-
-            if (cart.length > 0) {
-                summary.classList.remove('translate-y-32');
-                badge.innerText = cart.length;
-                totalDisplay.innerText = `$${total.toLocaleString()}`;
-                drawerTotal.innerText = `$${total.toLocaleString()}`;
-            } else {
-                summary.classList.add('translate-y-32');
-            }
-
-            const list = document.getElementById('cart-items-list');
-            list.innerHTML = '';
-            cart.forEach(item => {
-                list.innerHTML += `
-                    <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                        <div class="flex-1">
-                            <h4 class="font-bold text-gray-800 text-xs">${item.name}</h4>
-                            ${item.selectedSide ? `<p class="text-[9px] text-blue-500 font-bold uppercase italic mt-0.5">Guarnición: ${item.selectedSide}</p>` : ''}
-                            <p class="text-[10px] font-black text-gray-400 mt-1">$${(isTransfer ? item.mp : item.cash).toLocaleString()}</p>
-                        </div>
-                        <button onclick="removeFromCart(${item.cartId})" class="text-gray-300 p-2 active:text-red-500"><i class="fas fa-trash-alt"></i></button>
-                    </div>`;
-            });
-        }
-
-        function toggleCartDrawer(show) {
-            const drawer = document.getElementById('cart-drawer');
-            const overlay = document.getElementById('cart-drawer-overlay');
-            if (show && cart.length > 0) {
-                drawer.classList.replace('drawer-closed', 'drawer-open');
-                overlay.classList.remove('hidden');
-            } else {
-                drawer.classList.replace('drawer-open', 'drawer-closed');
-                overlay.classList.add('hidden');
-            }
-        }
-
-        function filterItems(cat, btn) {
-            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderMenu(cat === 'todos' ? menuData : menuData.filter(i => i.cat === cat));
-        }
-
-        function sendWhatsApp() {
-            if (cart.length === 0) return;
-            const isTransfer = document.getElementById('pay-transfer').checked;
-            let msg = "*PEDIDO - MAXICOMIDAS*\n----------------------------\n";
-            cart.forEach(i => {
-                msg += `• *${i.name}* ($${(isTransfer ? i.mp : i.cash).toLocaleString()})\n`;
-                if(i.selectedSide) msg += `  _Guarnición: ${i.selectedSide}_\n`;
-            });
-            const total = cart.reduce((a, b) => a + (isTransfer ? b.mp : b.cash), 0);
-            msg += `----------------------------\n✅ *TOTAL: $${total.toLocaleString()}*\n`;
-            msg += `💳 *PAGO:* ${isTransfer ? 'Transferencia' : 'Efectivo'}\n\n📍 *Dirección:* \n`;
-            window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        window.onload = initApp;
-    </script>
-</body>
-</html>
+            {"id":1,"name":"Pollo al curry con arroz","cat":"hoy","cash":15000,"mp":16000,"desc":"Pollo al curry con arroz","side":false},
+            {"id":2,"name":"Vacío al horno","cat":"hoy","cash":18000,"mp":20000,"desc":"Vacío al horno","side":true},
+            {"id":3,"name":"Ñoquis caseros de papa","cat":"hoy","cash":14000,"mp":15000,"desc":"Ñoquis caseros de papa","side":false},
+            {"id":4,"name":"Ravioles de pollo y verdura","cat":"hoy","cash":14000,"mp":15000,"desc":"Ravioles de pollo y verdura","side":false},
+            {"id":5,"name":"Bife de costilla a la plancha","cat":"hoy","cash":17000,"mp":19000,"desc":"Bife de costilla a la plancha","side":true},
+            {"id":6,"name":"Ribs de cerdo con salsa barbacoa casera","cat":"hoy","cash":22000,"mp":24000,"desc":"Ribs de cerdo con salsa barbacoa casera","side":true},
+            {"id":7,"name":"Pastel de papas","cat":"hoy","cash":13000,"mp":14000,"desc":"Pastel de papas","side":false},
+            {"id":8,"name":"Pastel de calabaza espinaca y queso","cat":"hoy","cash":14000,"mp":15000,"desc":"Pastel de calabaza espinaca y queso","side":false},
+            {"id":9,"name":"Pechugas cubiertas con cebolla, morrón, verdeo, muzarrella y espárragos","cat":"hoy","cash":16000,"mp":17000,"desc":"Pechugas cubiertas con cebolla, morrón, verdeo, muzarrella y espárragos","side":true},
+            {"id":10,"name":"Pechugas cubiertas con espinacas y queso","cat":"hoy","cash":16000,"mp":17000,"desc":"Pechugas cubiertas con espinacas y queso","side":true},
+            {"id":11,"name":"Pechugas caprese","cat":"hoy","cash":16000,"mp":17000,"desc":"Pechugas caprese","side":true},
+            {"id":12,"name":"Pechugas a la plancha","cat":"hoy","cash":14000,"mp":15000,"desc":"Pechugas a la plancha","side":true},
+            {"id":13,"name":"Tarta de jamón, queso, tomate, albahaca","cat":"hoy","cash":14000,"mp":15000,"desc":"Tarta de jamón, queso, tomate, albahaca","side":false},
+            {"id":14,"name":"Tarta de espinaca y queso","cat":"hoy","cash":14000,"mp":15000,"desc":"Tarta de espinaca y queso","side":false},
+            {"id":15,"name":"Tomates rellenos con arroz y atún","cat":"hoy","cash":13000,"mp":14000,"desc":"Tomates rellenos con arroz y atún","side":false},
+            {"id":16,"name":"Ensaladas completa con jamón y queso","cat":"hoy","cash":13000,"mp":14000,"desc":"Ensaladas completa con jamón y queso","side":false},
+            {"id":17,"name":"Ensalada completa con pollo","cat":"hoy","cash":13000,"mp":14000,"desc":"Ensalada completa con pollo","side":false},
+            {"id":18,"name":"Ensalada completa con atun","cat":"hoy","cash":13000,"mp":14000,"desc":"Ensalada completa con atun","side":false},
+            {"id":19,"name":"Tallarines con salsa rosa o pesto","cat":"pastas","cash":10000,"mp":11000,"desc":"Tallarines con salsa rosa o pesto","side":false},
+            {"id":20,"name":"Tallarines con bolognesa","cat":"pastas","cash":12000,"mp":13000,"desc":"Tallarines con bolognesa","side":false},
+            {"id":21,"name":"Ravioles de verdura y pollo","cat":"pastas","cash":14000,"mp":15000,"desc":"Ravioles de verdura y pollo","side":false},
+            {"id":22,"name":"Ravioles de ricotta","cat":"pastas","cash":14000,"mp":15000,"desc":"Ravioles de ricotta","side":false},
+            {"id":23,"name":"Canelones de espinaca","cat":"pastas","cash":14000,"mp":15000,"desc":"Canelones de espinaca","side":false},
+            {"id":24,"name":"Lasagna de espinacas jamón y queso","cat":"pastas","cash":14000,"mp":15000,"desc":"Lasagna de espinacas jamón y queso","side":false},
+            {"id":25,"name":"Cap
