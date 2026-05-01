@@ -79,7 +79,7 @@
                 </div>
                 <div class="bg-white/10 rounded-2xl p-3 border border-white/5">
                     <p class="text-[9px] uppercase font-black text-red-300 mb-1">Horarios</p>
-                    <p id="hours-display" class="text-xs font-bold">---</p>
+                    <p id="hours-display" class="text-xs font-bold">Mar-Dom 10:30-14:30 / 19:00-22:30</p>
                 </div>
             </div>
         </div>
@@ -186,12 +186,8 @@
         const CONFIG = {
     "whatsapp": null,
     "alias": "MAXI.COM.ALE (NESTOR ALEJANDRO ROMERO)",
-    "horarios": {
-        "dias": "Martes a Domingos",
-        "mediodia": "10:30 a 14:30 hs",
-        "noche": "19:00 a 22:30 hs"
-    },
-    "estado": "Lunes cerrado",
+    "horarios": "Martes a Domingos: 10:30 a 14:30 hs y 19:00 a 22:30 hs. Lunes cerrado.",
+    "estado": "Abierto (Feriados trabajan normalmente excepto lunes)",
     "categorias": [
         "Platos del día",
         "Pastas",
@@ -371,7 +367,7 @@
     {
         "id": 18,
         "name": "Ensalada completa con jamón y queso",
-        "cat": "Platos del día",
+        "cat": "Ensaladas",
         "cash": 12000,
         "mp": 13000,
         "desc": "Lechuga, tomate, zanahoria, choclo, huevo, jamón y queso",
@@ -380,7 +376,7 @@
     {
         "id": 19,
         "name": "Ensalada completa con pollo",
-        "cat": "Platos del día",
+        "cat": "Ensaladas",
         "cash": 12000,
         "mp": 13000,
         "desc": "Lechuga, tomate, zanahoria, choclo, huevo y pollo grillado",
@@ -389,7 +385,7 @@
     {
         "id": 20,
         "name": "Ensalada completa con atún",
-        "cat": "Platos del día",
+        "cat": "Ensaladas",
         "cash": 12000,
         "mp": 13000,
         "desc": "Lechuga, tomate, zanahoria, choclo, huevo y atún",
@@ -397,7 +393,7 @@
     },
     {
         "id": 21,
-        "name": "Tallarines (Salsa rosa o pesto)",
+        "name": "Tallarines con salsa rosa o pesto",
         "cat": "Pastas",
         "cash": 10000,
         "mp": 11000,
@@ -406,7 +402,7 @@
     },
     {
         "id": 22,
-        "name": "Tallarines (Bolognesa)",
+        "name": "Tallarines con Bolognesa",
         "cat": "Pastas",
         "cash": 12000,
         "mp": 13000,
@@ -415,7 +411,7 @@
     },
     {
         "id": 23,
-        "name": "Ravioles de verdura/pollo/ricotta (Fileto o rosa)",
+        "name": "Ravioles de verdura y pollo o ricotta (Fileto o rosa)",
         "cat": "Pastas",
         "cash": 13000,
         "mp": 14000,
@@ -424,7 +420,7 @@
     },
     {
         "id": 24,
-        "name": "Ravioles de verdura/pollo/ricotta (Bolognesa)",
+        "name": "Ravioles de verdura y pollo o ricotta (Bolognesa)",
         "cat": "Pastas",
         "cash": 15000,
         "mp": 16000,
@@ -469,7 +465,7 @@
     },
     {
         "id": 29,
-        "name": "Capellettis de ricotta jamón y muzarrella (Fileto o rosa)",
+        "name": "Capellettis caseros de ricotta jamón y muzarrella (Fileto o rosa)",
         "cat": "Pastas",
         "cash": 14000,
         "mp": 15000,
@@ -478,7 +474,7 @@
     },
     {
         "id": 30,
-        "name": "Capellettis de ricotta jamón y muzarrella (Bolognesa)",
+        "name": "Capellettis caseros de ricotta jamón y muzarrella (Bolognesa)",
         "cat": "Pastas",
         "cash": 16000,
         "mp": 17000,
@@ -575,7 +571,7 @@
         let pendingItem = null;
 
         function initApp() {
-            document.getElementById('alias-display').innerText = `Alias: ${CONFIG.alias}`;
+            document.getElementById('alias-display').innerText = CONFIG.alias;
             document.getElementById('hours-display').innerText = CONFIG.horarios;
             document.getElementById('status-pill').innerText = CONFIG.estado;
             document.getElementById('header-whatsapp').href = `https://wa.me/${CONFIG.whatsapp}?text=Hola!%20Tengo%20una%20consulta`;
