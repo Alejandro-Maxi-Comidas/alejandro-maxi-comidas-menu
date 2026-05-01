@@ -75,7 +75,7 @@
             <div class="grid grid-cols-2 gap-3 mt-4">
                 <div class="bg-white/10 rounded-2xl p-3 border border-white/5">
                     <p class="text-[9px] uppercase font-black text-blue-300 mb-1">Transferencias</p>
-                    <p id="alias-display" class="text-xs font-bold truncate">---</p>
+                    <p id="alias-display" class="text-xs font-bold truncate cursor-pointer hover:text-blue-200 transition-colors" onclick="copyAlias()" title="Click para copiar">---</p>
                 </div>
                 <div class="bg-white/10 rounded-2xl p-3 border border-white/5">
                     <p class="text-[9px] uppercase font-black text-red-300 mb-1">Horarios</p>
@@ -180,62 +180,397 @@
     </div>
 
     <script>
+        /*******************************************************
+         * 1. CONFIGURACIÓN DEL NEGOCIO (EDITAR AQUÍ)
+         *******************************************************/
         const CONFIG = {
-            whatsapp: "5491161850833",
-            alias: "MAXI.COM.ALE",
-            horarios: "Mar a Dom 11-15hs / 19-22:30hs",
-            estado: "Lunes Cerrado",
-            categorias: [
-                { id: "todos", label: "Todos" },
-                { id: "hoy", label: "Hoy" },
-                { id: "pastas", label: "Pastas" },
-                { id: "milanesas", label: "Milanesas" },
-                { id: "ensaladas", label: "Ensaladas" }
-            ],
-            guarniciones: ["Papas en cubos", "Papas Fritas", "Puré de Papas", "Puré de Calabaza", "Puré Mixto", "Arroz", "Papa, huevo y mayonesa", "Ensalada"]
-        };
+    "whatsapp": null,
+    "alias": "MAXI.COM.ALE (NESTOR ALEJANDRO ROMERO)",
+    "horarios": {
+        "dias": "Martes a Domingos",
+        "mediodia": "10:30 a 14:30 hs",
+        "noche": "19:00 a 22:30 hs"
+    },
+    "estado": "Lunes cerrado",
+    "categorias": [
+        "Platos del día",
+        "Pastas",
+        "Milanesas",
+        "Ensaladas",
+        "Postres"
+    ],
+    "guarniciones": [
+        "Papas en cubos",
+        "Fritas",
+        "Puré de papas",
+        "Puré de calabaza",
+        "Puré mixto",
+        "Arroz",
+        "Papa, huevo y mayonesa",
+        "Ensalada"
+    ]
+};
 
+        /*******************************************************
+         * 2. BASE DE DATOS DE PRODUCTOS (EDITAR AQUÍ)
+         *******************************************************/
         const menuData = [
-            {"id":1,"name":"Pollo al curry con arroz","cat":"hoy","cash":15000,"mp":16000,"desc":"Pechuga, cebolla, zanahoria, morrón, verdeo, arvejas, arroz y curry","side":false},
-            {"id":2,"name":"Vacío al horno","cat":"hoy","cash":18000,"mp":20000,"desc":"Vacío al horno","side":true},
-            {"id":3,"name":"Ñoquis caseros (Fileto/Rosa)","cat":"hoy","cash":14000,"mp":15000,"desc":"Ñoquis de papa","side":false},
-            {"id":4,"name":"Ñoquis caseros (Bolognesa)","cat":"hoy","cash":16000,"mp":17000,"desc":"Ñoquis de papa","side":false},
-            {"id":5,"name":"Ravioles boscaiola","cat":"hoy","cash":16000,"mp":17000,"desc":"Ricotta, panceta, cebolla, verdeo, champignones y crema","side":false},
-            {"id":6,"name":"Bife de costilla","cat":"hoy","cash":17000,"mp":19000,"desc":"Bife de costilla a la plancha","side":true},
-            {"id":7,"name":"Ribs de cerdo BBQ","cat":"hoy","cash":22000,"mp":24000,"desc":"Salsa barbacoa casera","side":true},
-            {"id":8,"name":"Pastel de papas","cat":"hoy","cash":12000,"mp":13000,"desc":"Pastel de papas","side":false},
-            {"id":9,"name":"Pastel de calabaza","cat":"hoy","cash":13000,"mp":14000,"desc":"Calabaza, espinaca y queso","side":false},
-            {"id":10,"name":"Pechugas rellenas","cat":"hoy","cash":15000,"mp":16000,"desc":"Cebolla, morrón, verdeo, muzzarella y espárragos","side":true},
-            {"id":11,"name":"Pechugas espinaca y queso","cat":"hoy","cash":15000,"mp":16000,"desc":"Pechugas con espinacas y queso","side":true},
-            {"id":12,"name":"Pechugas caprese","cat":"hoy","cash":15000,"mp":16000,"desc":"Muzzarella, tomate y albahaca","side":true},
-            {"id":13,"name":"Pechugas a la plancha","cat":"hoy","cash":13000,"mp":14000,"desc":"Pechugas a la plancha","side":true},
-            {"id":14,"name":"Tarta jamón y queso","cat":"hoy","cash":13000,"mp":14000,"desc":"Jamón, queso, tomate, albahaca","side":false},
-            {"id":15,"name":"Tarta espinaca y queso","cat":"hoy","cash":13000,"mp":14000,"desc":"Espinaca y queso","side":false},
-            {"id":16,"name":"Tomates rellenos","cat":"hoy","cash":12000,"mp":13000,"desc":"Arroz y atún","side":false},
-            {"id":17,"name":"Ensalada completa jamón/queso","cat":"ensaladas","cash":12000,"mp":13000,"desc":"Lechuga, tomate, zanahoria, choclo, huevo, jamón y queso","side":false},
-            {"id":18,"name":"Ensalada completa pollo","cat":"ensaladas","cash":12000,"mp":13000,"desc":"Lechuga, tomate, zanahoria, choclo, huevo y pollo","side":false},
-            {"id":19,"name":"Ensalada completa atún","cat":"ensaladas","cash":12000,"mp":13000,"desc":"Lechuga, tomate, zanahoria, choclo, huevo y atún","side":false},
-            {"id":20,"name":"Tallarines (Fileto/Rosa/Pesto)","cat":"pastas","cash":10000,"mp":11000,"desc":"Tallarines caseros","side":false},
-            {"id":21,"name":"Tallarines (Bolognesa)","cat":"pastas","cash":12000,"mp":13000,"desc":"Tallarines caseros","side":false},
-            {"id":22,"name":"Ravioles (Fileto/Rosa)","cat":"pastas","cash":13000,"mp":14000,"desc":"Verdura/Pollo o Ricotta","side":false},
-            {"id":23,"name":"Ravioles (Bolognesa)","cat":"pastas","cash":15000,"mp":16000,"desc":"Verdura/Pollo o Ricotta","side":false},
-            {"id":24,"name":"Canelones (Fileto/Rosa)","cat":"pastas","cash":13000,"mp":14000,"desc":"Espinaca","side":false},
-            {"id":25,"name":"Canelones (Bolognesa)","cat":"pastas","cash":15000,"mp":16000,"desc":"Espinaca","side":false},
-            {"id":26,"name":"Lasagna (Fileto/Rosa)","cat":"pastas","cash":13000,"mp":14000,"desc":"Espinacas, jamón y queso","side":false},
-            {"id":27,"name":"Lasagna (Bolognesa)","cat":"pastas","cash":15000,"mp":16000,"desc":"Espinacas, jamón y queso","side":false},
-            {"id":28,"name":"Capellettis (Fileto/Rosa)","cat":"pastas","cash":14000,"mp":15000,"desc":"Ricotta, jamón y muzzarella","side":false},
-            {"id":29,"name":"Capellettis (Bolognesa)","cat":"pastas","cash":16000,"mp":17000,"desc":"Ricotta, jamón y muzzarella","side":false},
-            {"id":30,"name":"Sandwich completo de mila","cat":"milanesas","cash":13000,"mp":14000,"desc":"Mila, lechuga, tomate, jamón, queso y mayo","side":false},
-            {"id":31,"name":"Sandwich completo con papas","cat":"milanesas","cash":15000,"mp":16000,"desc":"Mila, lechuga, tomate, jamón, queso, mayo y papas","side":false},
-            {"id":32,"name":"Milanesa de ternera","cat":"milanesas","cash":14000,"mp":15000,"desc":"Milanesa de ternera","side":true},
-            {"id":33,"name":"Milanesa napolitana","cat":"milanesas","cash":16000,"mp":17000,"desc":"Milanesa napolitana","side":true},
-            {"id":34,"name":"Suprema de pollo","cat":"milanesas","cash":14000,"mp":15000,"desc":"Suprema de pollo","side":true},
-            {"id":35,"name":"Suprema napolitana","cat":"milanesas","cash":16000,"mp":17000,"desc":"Suprema napolitana","side":true},
-            {"id":36,"name":"Milanesa de peceto","cat":"milanesas","cash":15000,"mp":16000,"desc":"Milanesa de peceto","side":true},
-            {"id":37,"name":"Milanesa de peceto napolitana","cat":"milanesas","cash":17000,"mp":18000,"desc":"Milanesa de peceto napolitana","side":true},
-            {"id":38,"name":"Filet de merluza","cat":"milanesas","cash":13000,"mp":14000,"desc":"Filet de merluza rebozado","side":true}
-        ];
+    {
+        "id": 1,
+        "name": "Pollo al curry con arroz",
+        "cat": "Platos del día",
+        "cash": 15000,
+        "mp": 16000,
+        "desc": "Pechuga en cubos, cebolla, zanahoria, morrón, verdeo, arvejas, arroz y curry",
+        "side": false
+    },
+    {
+        "id": 2,
+        "name": "Vacío al horno",
+        "cat": "Platos del día",
+        "cash": 18000,
+        "mp": 20000,
+        "desc": "",
+        "side": true
+    },
+    {
+        "id": 3,
+        "name": "Ñoquis caseros de papa (Fileto o rosa)",
+        "cat": "Platos del día",
+        "cash": 14000,
+        "mp": 15000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 4,
+        "name": "Ñoquis caseros de papa (Bolognesa)",
+        "cat": "Platos del día",
+        "cash": 16000,
+        "mp": 17000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 5,
+        "name": "Ravioles de pollo y verdura",
+        "cat": "Platos del día",
+        "cash": 16000,
+        "mp": 17000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 6,
+        "name": "Ravioles de ricotta con salsa boscaiola",
+        "cat": "Platos del día",
+        "cash": 16000,
+        "mp": 17000,
+        "desc": "Panceta en cubos, cebolla, verdeo, champignones y crema",
+        "side": false
+    },
+    {
+        "id": 7,
+        "name": "Bife de costilla a la plancha",
+        "cat": "Platos del día",
+        "cash": 17000,
+        "mp": 19000,
+        "desc": "",
+        "side": true
+    },
+    {
+        "id": 8,
+        "name": "Ribs de cerdo con salsa barbacoa casera",
+        "cat": "Platos del día",
+        "cash": 22000,
+        "mp": 24000,
+        "desc": "",
+        "side": true
+    },
+    {
+        "id": 9,
+        "name": "Pastel de papas",
+        "cat": "Platos del día",
+        "cash": 12000,
+        "mp": 13000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 10,
+        "name": "Pastel de calabaza espinaca y queso",
+        "cat": "Platos del día",
+        "cash": 13000,
+        "mp": 14000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 11,
+        "name": "Pechugas cubiertas con cebolla, morrón, verdeo, muzarrella y espárragos",
+        "cat": "Platos del día",
+        "cash": 15000,
+        "mp": 16000,
+        "desc": "",
+        "side": true
+    },
+    {
+        "id": 12,
+        "name": "Pechugas cubiertas con espinacas y queso",
+        "cat": "Platos del día",
+        "cash": 15000,
+        "mp": 16000,
+        "desc": "",
+        "side": true
+    },
+    {
+        "id": 13,
+        "name": "Pechugas caprese",
+        "cat": "Platos del día",
+        "cash": 15000,
+        "mp": 16000,
+        "desc": "Cubiertas con muzzarella, tomate y albahaca",
+        "side": true
+    },
+    {
+        "id": 14,
+        "name": "Pechugas a la plancha",
+        "cat": "Platos del día",
+        "cash": 13000,
+        "mp": 14000,
+        "desc": "",
+        "side": true
+    },
+    {
+        "id": 15,
+        "name": "Tarta de jamón, queso, tomate, albahaca",
+        "cat": "Platos del día",
+        "cash": 13000,
+        "mp": 14000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 16,
+        "name": "Tarta de espinaca y queso",
+        "cat": "Platos del día",
+        "cash": 13000,
+        "mp": 14000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 17,
+        "name": "Tomates rellenos con arroz y atún",
+        "cat": "Platos del día",
+        "cash": 12000,
+        "mp": 13000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 18,
+        "name": "Ensalada completa con jamón y queso",
+        "cat": "Platos del día",
+        "cash": 12000,
+        "mp": 13000,
+        "desc": "Lechuga, tomate, zanahoria, choclo, huevo, jamón y queso",
+        "side": false
+    },
+    {
+        "id": 19,
+        "name": "Ensalada completa con pollo",
+        "cat": "Platos del día",
+        "cash": 12000,
+        "mp": 13000,
+        "desc": "Lechuga, tomate, zanahoria, choclo, huevo y pollo grillado",
+        "side": false
+    },
+    {
+        "id": 20,
+        "name": "Ensalada completa con atún",
+        "cat": "Platos del día",
+        "cash": 12000,
+        "mp": 13000,
+        "desc": "Lechuga, tomate, zanahoria, choclo, huevo y atún",
+        "side": false
+    },
+    {
+        "id": 21,
+        "name": "Tallarines (Salsa rosa o pesto)",
+        "cat": "Pastas",
+        "cash": 10000,
+        "mp": 11000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 22,
+        "name": "Tallarines (Bolognesa)",
+        "cat": "Pastas",
+        "cash": 12000,
+        "mp": 13000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 23,
+        "name": "Ravioles de verdura/pollo/ricotta (Fileto o rosa)",
+        "cat": "Pastas",
+        "cash": 13000,
+        "mp": 14000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 24,
+        "name": "Ravioles de verdura/pollo/ricotta (Bolognesa)",
+        "cat": "Pastas",
+        "cash": 15000,
+        "mp": 16000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 25,
+        "name": "Canelones de espinaca (Fileto o rosa)",
+        "cat": "Pastas",
+        "cash": 13000,
+        "mp": 14000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 26,
+        "name": "Canelones de espinaca (Bolognesa)",
+        "cat": "Pastas",
+        "cash": 15000,
+        "mp": 16000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 27,
+        "name": "Lasagna de espinacas jamón y queso (Fileto o rosa)",
+        "cat": "Pastas",
+        "cash": 13000,
+        "mp": 14000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 28,
+        "name": "Lasagna de espinacas jamón y queso (Bolognesa)",
+        "cat": "Pastas",
+        "cash": 15000,
+        "mp": 16000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 29,
+        "name": "Capellettis de ricotta jamón y muzarrella (Fileto o rosa)",
+        "cat": "Pastas",
+        "cash": 14000,
+        "mp": 15000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 30,
+        "name": "Capellettis de ricotta jamón y muzarrella (Bolognesa)",
+        "cat": "Pastas",
+        "cash": 16000,
+        "mp": 17000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 31,
+        "name": "Sandwich completo de mila",
+        "cat": "Milanesas",
+        "cash": 13000,
+        "mp": 14000,
+        "desc": "Mila, lechuga, tomate, jamón, queso y mayonesa",
+        "side": false
+    },
+    {
+        "id": 32,
+        "name": "Sandwich completo de mila con papas",
+        "cat": "Milanesas",
+        "cash": 15000,
+        "mp": 16000,
+        "desc": "",
+        "side": false
+    },
+    {
+        "id": 33,
+        "name": "Milanesa de ternera",
+        "cat": "Milanesas",
+        "cash": 14000,
+        "mp": 15000,
+        "desc": "",
+        "side": true
+    },
+    {
+        "id": 34,
+        "name": "Milanesa napolitana",
+        "cat": "Milanesas",
+        "cash": 16000,
+        "mp": 17000,
+        "desc": "",
+        "side": true
+    },
+    {
+        "id": 35,
+        "name": "Suprema de pollo",
+        "cat": "Milanesas",
+        "cash": 14000,
+        "mp": 15000,
+        "desc": "",
+        "side": true
+    },
+    {
+        "id": 36,
+        "name": "Suprema napolitana",
+        "cat": "Milanesas",
+        "cash": 16000,
+        "mp": 17000,
+        "desc": "",
+        "side": true
+    },
+    {
+        "id": 37,
+        "name": "Milanesa de peceto",
+        "cat": "Milanesas",
+        "cash": 15000,
+        "mp": 16000,
+        "desc": "",
+        "side": true
+    },
+    {
+        "id": 38,
+        "name": "Milanesa de peceto napolitana",
+        "cat": "Milanesas",
+        "cash": 17000,
+        "mp": 18000,
+        "desc": "",
+        "side": true
+    },
+    {
+        "id": 39,
+        "name": "Filet de merluza rebozado",
+        "cat": "Milanesas",
+        "cash": 13000,
+        "mp": 14000,
+        "desc": "",
+        "side": true
+    }
+];
 
+        /*******************************************************
+         * 3. LÓGICA DEL SISTEMA (NO TOCAR)
+         *******************************************************/
         let cart = [];
         let pendingItem = null;
 
@@ -386,6 +721,12 @@
             msg += `----------------------------\n✅ *TOTAL: $${total.toLocaleString()}*\n`;
             msg += `💳 *PAGO:* ${isTransfer ? 'Transferencia' : 'Efectivo'}\n\n📍 *Dirección:* \n`;
             window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function copyAlias() {
+            navigator.clipboard.writeText(CONFIG.alias).then(() => {
+                alert("Alias copiado: " + CONFIG.alias);
+            });
         }
 
         window.onload = initApp;
