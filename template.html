@@ -281,14 +281,16 @@
 
         function initApp() {
             // Validate CONFIG properties before using them
-            if (!CONFIG || !CONFIG.alias || !CONFIG.whatsapp) {
+            if (!CONFIG || !CONFIG.alias) {
                 console.error('CONFIG is missing required properties');
                 return;
             }
             
             document.getElementById('alias-display').innerText = CONFIG.alias;
             document.getElementById('hours-display').innerText = formatHours(CONFIG.horarios);
-            document.getElementById('header-whatsapp').href = `https://wa.me/${CONFIG.whatsapp}?text=Hola!%20Tengo%20una%20consulta`;
+            if (CONFIG.whatsapp) {
+                document.getElementById('header-whatsapp').href = `https://wa.me/${CONFIG.whatsapp}?text=Hola!%20Tengo%20una%20consulta`;
+            }
             
             const nav = document.getElementById('category-nav');
             if (CONFIG.categorias && Array.isArray(CONFIG.categorias)) {
