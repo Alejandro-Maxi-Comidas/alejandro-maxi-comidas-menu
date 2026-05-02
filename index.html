@@ -114,7 +114,7 @@
         <div class="bg-white rounded-full shadow-lg py-2.5 px-4 flex justify-between items-center text-[10px] font-black text-gray-500 uppercase tracking-tight border border-gray-100">
             <span><i class="fas fa-motorcycle text-blue-500 mr-1"></i> Envío sin cargo</span>
             <span class="w-px h-3 bg-gray-200"></span>
-            <span id="status-pill" class="span-status">Cargando...</span>
+            <span id="status-pill" class="text-red-500"><i class="fas fa-times-circle mr-1"></i> LUNES CERRADO</span>
         </div>
     </div>
 
@@ -211,9 +211,9 @@
          * 1. CONFIGURACIÓN DEL NEGOCIO (EDITAR AQUÍ)
          *******************************************************/
         const CONFIG = {
-    "whatsapp": "No especificado",
+    "whatsapp": "",
     "alias": "MAXI.COM.ALE",
-    "horarios": "Mar-Dom 10:30-14:30 / 19:00-22:30",
+    "horarios": "Mar a Dom 10:30-14:30 / 19:00-22:30",
     "estado": "Lunes cerrado",
     "categorias": [
         {
@@ -273,7 +273,7 @@
     },
     {
         "id": "3",
-        "name": "Ñoquis caseros de papa (Fileto/Rosa)",
+        "name": "Ñoquis caseros de papa (Fileto o rosa)",
         "cat": "hoy",
         "cash": 14000,
         "mp": 15000,
@@ -300,11 +300,11 @@
     },
     {
         "id": "6",
-        "name": "Ravioles de ricotta (Boscaiola)",
+        "name": "Ravioles de ricotta con salsa boscaiola",
         "cat": "hoy",
         "cash": 16000,
         "mp": 17000,
-        "desc": "Panceta en cubos, cebolla, verdeo, champignones y crema",
+        "desc": "panceta en cubos, cebolla, verdeo, champignones y crema",
         "side": false
     },
     {
@@ -318,7 +318,7 @@
     },
     {
         "id": "8",
-        "name": "Ribs de cerdo con salsa barbacoa",
+        "name": "Ribs de cerdo con salsa barbacoa casera",
         "cat": "hoy",
         "cash": 22000,
         "mp": 24000,
@@ -345,11 +345,11 @@
     },
     {
         "id": "11",
-        "name": "Pechugas con vegetales y muzarella",
+        "name": "Pechugas con cebolla, morrón, verdeo, muzarrella y espárragos",
         "cat": "hoy",
         "cash": 15000,
         "mp": 16000,
-        "desc": "Cebolla, morrón, verdeo, muzarrella y espárragos",
+        "desc": "",
         "side": true
     },
     {
@@ -367,7 +367,7 @@
         "cat": "hoy",
         "cash": 15000,
         "mp": 16000,
-        "desc": "Muzzarella, tomate y albahaca",
+        "desc": "Cubiertas con muzzarella, tomate y albahaca",
         "side": true
     },
     {
@@ -408,7 +408,7 @@
     },
     {
         "id": "18",
-        "name": "Ensalada completa jamón y queso",
+        "name": "Ensalada completa con jamón y queso",
         "cat": "ensaladas",
         "cash": 12000,
         "mp": 13000,
@@ -453,7 +453,7 @@
     },
     {
         "id": "23",
-        "name": "Ravioles verdura/pollo/ricotta (Fileto/Rosa)",
+        "name": "Ravioles verdura/pollo/ricotta (Fileto o rosa)",
         "cat": "pastas",
         "cash": 13000,
         "mp": 14000,
@@ -471,7 +471,7 @@
     },
     {
         "id": "25",
-        "name": "Canelones de espinaca (Fileto/Rosa)",
+        "name": "Canelones de espinaca (Fileto o rosa)",
         "cat": "pastas",
         "cash": 13000,
         "mp": 14000,
@@ -489,25 +489,25 @@
     },
     {
         "id": "27",
-        "name": "Lasagna (Fileto/Rosa)",
+        "name": "Lasagna de espinacas jamón y queso (Fileto o rosa)",
         "cat": "pastas",
         "cash": 13000,
         "mp": 14000,
-        "desc": "Espinacas, jamón y queso",
+        "desc": "",
         "side": false
     },
     {
         "id": "28",
-        "name": "Lasagna (Bolognesa)",
+        "name": "Lasagna de espinacas jamón y queso (Bolognesa)",
         "cat": "pastas",
         "cash": 15000,
         "mp": 16000,
-        "desc": "Espinacas, jamón y queso",
+        "desc": "",
         "side": false
     },
     {
         "id": "29",
-        "name": "Capellettis ricotta, jamón y muzarella (Fileto/Rosa)",
+        "name": "Capellettis de ricotta jamón y muzarrella (Fileto o rosa)",
         "cat": "pastas",
         "cash": 14000,
         "mp": 15000,
@@ -516,7 +516,7 @@
     },
     {
         "id": "30",
-        "name": "Capellettis ricotta, jamón y muzarella (Bolognesa)",
+        "name": "Capellettis de ricotta jamón y muzarrella (Bolognesa)",
         "cat": "pastas",
         "cash": 16000,
         "mp": 17000,
@@ -529,7 +529,7 @@
         "cat": "milanesas",
         "cash": 13000,
         "mp": 14000,
-        "desc": "Mila, lechuga, tomate, jamón, queso y mayonesa",
+        "desc": "mila, lechuga, tomate, jamón queso y mayonesa",
         "side": false
     },
     {
@@ -538,7 +538,7 @@
         "cat": "milanesas",
         "cash": 15000,
         "mp": 16000,
-        "desc": "Mila, lechuga, tomate, jamón, queso y mayonesa",
+        "desc": "",
         "side": false
     },
     {
@@ -613,19 +613,26 @@
         let pendingItem = null;
 
         function initApp() {
+            // Validate CONFIG properties before using them
+            if (!CONFIG || !CONFIG.alias || !CONFIG.whatsapp) {
+                console.error('CONFIG is missing required properties');
+                return;
+            }
+            
             document.getElementById('alias-display').innerText = CONFIG.alias;
             document.getElementById('hours-display').innerText = formatHours(CONFIG.horarios);
-            updateStatusPill();
             document.getElementById('header-whatsapp').href = `https://wa.me/${CONFIG.whatsapp}?text=Hola!%20Tengo%20una%20consulta`;
             
             const nav = document.getElementById('category-nav');
-            CONFIG.categorias.forEach((cat, idx) => {
-                const btn = document.createElement('button');
-                btn.className = `category-btn ${idx === 0 ? 'active' : ''} px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border border-gray-100 whitespace-nowrap transition-all`;
-                btn.innerText = cat.label;
-                btn.onclick = (e) => filterItems(cat.id, e.target);
-                nav.appendChild(btn);
-            });
+            if (CONFIG.categorias && Array.isArray(CONFIG.categorias)) {
+                CONFIG.categorias.forEach((cat, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = `category-btn ${idx === 0 ? 'active' : ''} px-6 py-2 rounded-full bg-white text-gray-600 font-bold text-sm shadow-sm border border-gray-100 whitespace-nowrap transition-all`;
+                    btn.innerText = cat.label;
+                    btn.onclick = (e) => filterItems(cat.id, e.target);
+                    nav.appendChild(btn);
+                });
+            }
 
             renderMenu(menuData);
         }
@@ -638,41 +645,32 @@
                 return defaultHours;
             }
             
-            // Normalize and format hours
+            // Clean and normalize hours - more conservative approach
             let formatted = hoursInput
-                .toLowerCase()
-                .replace(/a\s+/gi, '-')
-                .replace(/hs/gi, '')
-                .replace(/h\s+/gi, ':')
-                .replace(/:/g, ':')
-                .replace(/\s+/g, ' ')
+                .trim()
+                .replace(/\s+/g, ' ') // Normalize multiple spaces
+                .replace(/a\s*-\s*/gi, ' a ') // Fix "a-" patterns
+                .replace(/hs/gi, '') // Remove "hs" suffix
+                .replace(/h\s*/gi, ':') // Replace "h" with ":"
+                .replace(/:\s*/gi, ':') // Normalize colons
+                .replace(/:\s*:\s*/gi, ':') // Fix double colons
+                .replace(/\s*\/\s*/g, ' / ') // Normalize slash spacing
+                .replace(/\s*-\s*/g, ' - ') // Normalize dash spacing
                 .trim();
             
-            // Fix common patterns
-            formatted = formatted.replace(/mar-dom\s+10:30-14:30\s+\/\s+19:00-22:30/gi, 'Mar-Dom 10:30-14:30 / 19:00-22:30');
-            formatted = formatted.replace(/mar-domingos\s+10:30-14:30\s+\/\s+19:00-22:30/gi, 'Mar-Dom 10:30-14:30 / 19:00-22:30');
-            formatted = formatted.replace(/martes-domingo\s+10:30-14:30\s+\/\s+19:00-22:30/gi, 'Mar-Dom 10:30-14:30 / 19:00-22:30');
+            // Capitalize first letter of each day
+            formatted = formatted.replace(/^./, (match) => match.toUpperCase());
+            
+            // Ensure consistent format for common patterns
+            if (formatted.toLowerCase().includes('mar') && formatted.toLowerCase().includes('dom')) {
+                formatted = formatted.replace(/martes.?domingo/gi, 'Mar-Dom');
+                formatted = formatted.replace(/mar.?domingos/gi, 'Mar-Dom');
+                formatted = formatted.replace(/martes.?dom/gi, 'Mar-Dom');
+            }
             
             return formatted || defaultHours;
         }
 
-        function updateStatusPill() {
-            const statusPill = document.getElementById('status-pill');
-            const today = new Date().getDay(); // 0 = Sunday, 1 = Monday, etc.
-            
-            // Map day numbers to Spanish day names
-            const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-            const todayName = dayNames[today];
-            
-            // Check if today is Monday (1) - closed
-            if (today === 1) {
-                statusPill.innerHTML = '<i class="fas fa-times-circle mr-1"></i> CERRADO';
-                statusPill.className = 'text-red-500';
-            } else {
-                statusPill.innerHTML = '<i class="fas fa-check-circle mr-1"></i> ABIERTO';
-                statusPill.className = 'text-green-500';
-            }
-        }
 
         function renderMenu(items) {
             const grid = document.getElementById('menu-grid');
@@ -776,12 +774,18 @@
         function toggleCartDrawer(show) {
             const drawer = document.getElementById('cart-drawer');
             const overlay = document.getElementById('cart-drawer-overlay');
+            const summary = document.getElementById('cart-summary');
+            
             if (show && cart.length > 0) {
                 drawer.classList.replace('drawer-closed', 'drawer-open');
                 overlay.classList.remove('hidden');
+                summary.classList.remove('translate-y-32');
             } else {
                 drawer.classList.replace('drawer-open', 'drawer-closed');
                 overlay.classList.add('hidden');
+                if (cart.length === 0) {
+                    summary.classList.add('translate-y-32');
+                }
             }
         }
 
@@ -793,6 +797,11 @@
 
         function sendWhatsApp() {
             if (cart.length === 0) return;
+            if (!CONFIG.whatsapp) {
+                console.error('WhatsApp number not configured');
+                return;
+            }
+            
             const isTransfer = document.getElementById('pay-transfer').checked;
             let msg = "*PEDIDO - MAXICOMIDAS*\n----------------------------\n";
             cart.forEach(i => {
@@ -802,7 +811,10 @@
             const total = cart.reduce((a, b) => a + (isTransfer ? b.mp : b.cash), 0);
             msg += `----------------------------\n✅ *TOTAL: $${total.toLocaleString()}*\n`;
             msg += `💳 *PAGO:* ${isTransfer ? 'Transferencia' : 'Efectivo'}\n\n📍 *Dirección:* \n`;
-            window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
+            
+            // Encode the message properly to handle special characters
+            const encodedMessage = encodeURIComponent(msg);
+            window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodedMessage}`, '_blank');
         }
 
         function copyAlias() {
