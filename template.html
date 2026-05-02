@@ -372,7 +372,13 @@
         }
 
         function handleAddToCart(id) {
-            const item = menuData.find(i => i.id === id);
+            console.log("Adding to cart, ID:", id);
+            const item = menuData.find(i => i.id == id);
+            console.log("Item found:", item);
+            if (!item) {
+                console.error("Item not found for ID:", id);
+                return;
+            }
             if (item.side) {
                 pendingItem = item;
                 const grid = document.getElementById('sides-grid');
