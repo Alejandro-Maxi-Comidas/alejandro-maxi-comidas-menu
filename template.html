@@ -24,6 +24,11 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* Category Button Animations */
+        .category-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
         .category-btn.active {
             background-color: #1d3557;
             color: white;
@@ -31,32 +36,59 @@
             box-shadow: 0 4px 12px rgba(29, 53, 87, 0.2);
         }
 
+        .category-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Cart Drawer Animations */
         .cart-drawer {
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
         }
 
-        .drawer-open { transform: translateY(0); }
-        .drawer-closed { transform: translateY(100%); }
-
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        .drawer-open {
+            transform: translateY(0);
+            opacity: 1;
         }
         
-        .animate-slide-up {
-            animation: slideUp 0.3s ease-out;
+        .drawer-closed {
+            transform: translateY(100%);
+            opacity: 0;
         }
 
-        .payment-option:checked + label {
-            border-color: #1d3557;
-            background-color: #f0f4f8;
-            color: #1d3557;
+        /* Cart Summary Animation */
+        .cart-summary-enter {
+            animation: cartSummarySlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
-        /* Toast Notification */
+        .cart-summary-exit {
+            animation: cartSummarySlideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes cartSummarySlideUp {
+            from { transform: translate(-50%, 100%); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        @keyframes cartSummarySlideDown {
+            from { transform: translate(-50%, 0); opacity: 1; }
+            to { transform: translate(-50%, 100%); opacity: 0; }
+        }
+
+        /* Add to Cart Button Animation */
+        .add-btn {
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .add-btn:active {
+            transform: scale(0.9);
+        }
+
+        .add-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Toast Notification Animations */
         .toast {
             position: fixed;
             bottom: 100px;
@@ -70,7 +102,7 @@
             font-weight: 600;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             opacity: 0;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1000;
             white-space: nowrap;
         }
@@ -78,6 +110,108 @@
         .toast.show {
             transform: translateX(-50%) translateY(0);
             opacity: 1;
+        }
+
+        .toast.hide {
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+        }
+
+        /* Modal Animations */
+        .modal-overlay {
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        }
+
+        .modal-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .modal-overlay:not(.hidden) {
+            opacity: 1;
+        }
+
+        .modal-content.slide-up {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+
+        .modal-content.slide-up:not(.hidden) {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Side Selection Button Animation */
+        .side-btn {
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .side-btn:active {
+            transform: scale(0.97);
+        }
+
+        .side-btn.selected {
+            background-color: #1d3557;
+            color: white;
+            border-color: #1d3557;
+        }
+
+        /* Payment Option Animation */
+        .payment-option:checked + label {
+            border-color: #1d3557;
+            background-color: #f0f4f8;
+            color: #1d3557;
+            transform: scale(1.02);
+        }
+
+        .payment-option:checked + label:active {
+            transform: scale(0.98);
+        }
+
+        /* Scrollbar Hide */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Menu Card Animations */
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.3s ease-out;
+        }
+
+        /* Ripple Effect for Buttons */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10, 10);
+            opacity: 0;
+            transition: transform 0.5s, opacity 1s;
+        }
+
+        .ripple:active::after {
+            transform: scale(0, 0);
+            opacity: 0.3;
+            transition: 0s;
         }
     </style>
 </head>
@@ -89,7 +223,7 @@
             <div class="flex justify-between items-start mb-4">
                 <div>
                     <h1 class="text-3xl font-extrabold tracking-tight italic">MAXICOMIDAS</h1>
-                    <p class="text-[11px] uppercase tracking-widest text-blue-200 font-bold">Sabor Casero & Delivery</p>
+                    <p class="text-xs uppercase tracking-widest text-blue-200 font-bold">Sabor Casero & Delivery</p>
                 </div>
                 <a id="header-whatsapp" href="#" class="bg-[#25D366] w-12 h-12 rounded-full hover:bg-[#128C7E] transition-colors shadow-lg flex items-center justify-center shrink-0">
                     <i class="fab fa-whatsapp text-2xl"></i>
@@ -98,11 +232,11 @@
             
             <div class="grid grid-cols-2 gap-3 mt-4">
                 <div class="bg-white/10 rounded-2xl p-3 border border-white/5">
-                    <p class="text-[9px] uppercase font-black text-blue-300 mb-1">Transferencias</p>
+                    <p class="text-[10px] uppercase font-black text-blue-300 mb-1">Transferencias</p>
                     <p id="alias-display" class="text-xs font-bold truncate cursor-pointer hover:text-blue-200 transition-colors" onclick="copyAlias()" title="Click para copiar">---</p>
                 </div>
                 <div class="bg-white/10 rounded-2xl p-3 border border-white/5">
-                    <p class="text-[9px] uppercase font-black text-red-300 mb-1">Horarios</p>
+                    <p class="text-[10px] uppercase font-black text-red-300 mb-1">Horarios</p>
                     <p id="hours-display" class="text-xs font-bold">Mar-Dom 10:30-14:30 / 19:00-22:30</p>
                 </div>
             </div>
@@ -111,7 +245,7 @@
 
     <!-- Info Pill -->
     <div class="max-w-md mx-auto -mt-6 px-6 relative z-10">
-        <div class="bg-white rounded-full shadow-lg py-2.5 px-4 flex justify-between items-center text-[10px] font-black text-gray-500 uppercase tracking-tight border border-gray-100">
+        <div class="bg-white rounded-full shadow-lg py-2.5 px-4 flex justify-between items-center text-[11px] font-black text-gray-500 uppercase tracking-tight border border-gray-100">
             <span><i class="fas fa-motorcycle text-blue-500 mr-1"></i> Envío sin cargo</span>
             <span class="w-px h-3 bg-gray-200"></span>
             <span id="status-pill" class="text-red-500"><i class="fas fa-times-circle mr-1"></i> LUNES CERRADO</span>
@@ -136,10 +270,10 @@
         <div class="flex items-center gap-3">
             <div class="relative bg-white/10 p-2 rounded-xl">
                 <i class="fas fa-shopping-basket text-xl"></i>
-                <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#1d3557]">0</span>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#1d3557]">0</span>
             </div>
             <div>
-                <p id="cart-text-qty" class="text-[10px] font-bold uppercase text-blue-200 tracking-wider">Ver mi pedido</p>
+                <p id="cart-text-qty" class="text-[11px] font-bold uppercase text-blue-200 tracking-wider">Ver mi pedido</p>
                 <p id="cart-text-total" class="font-black text-lg leading-tight tracking-tighter">$0</p>
             </div>
         </div>
@@ -155,26 +289,26 @@
         
         <div class="px-6 py-4 flex justify-between items-center border-b border-gray-50">
             <h2 class="text-xl font-extrabold text-gray-800 tracking-tighter">Mi Pedido</h2>
-            <button onclick="clearCart()" class="text-red-500 text-[10px] font-black uppercase tracking-widest bg-red-50 px-3 py-1 rounded-full">Vaciar</button>
+            <button onclick="clearCart()" class="text-red-500 text-[11px] font-black uppercase tracking-widest bg-red-50 px-3 py-1 rounded-full">Vaciar</button>
         </div>
 
         <div id="cart-items-list" class="flex-1 overflow-y-auto px-6 py-4 space-y-3 no-scrollbar bg-gray-50/50"></div>
 
         <div class="px-6 py-4 bg-white border-t border-gray-100">
-            <p class="text-[10px] font-black uppercase text-gray-400 mb-3 tracking-widest text-center">Seleccioná cómo vas a pagar:</p>
+            <p class="text-[11px] font-black uppercase text-gray-400 mb-3 tracking-widest text-center">Seleccioná cómo vas a pagar:</p>
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <input type="radio" name="payment" id="pay-cash" value="cash" class="hidden payment-option" checked onchange="updateUI()">
                     <label for="pay-cash" class="flex flex-col items-center justify-center p-3 border-2 border-gray-100 rounded-2xl cursor-pointer transition-all">
                         <i class="fas fa-money-bill-wave mb-1 text-xl"></i>
-                        <span class="text-[10px] font-black uppercase">Efectivo</span>
+                        <span class="text-[11px] font-black uppercase">Efectivo</span>
                     </label>
                 </div>
                 <div>
                     <input type="radio" name="payment" id="pay-transfer" value="transfer" class="hidden payment-option" onchange="updateUI()">
                     <label for="pay-transfer" class="flex flex-col items-center justify-center p-3 border-2 border-gray-100 rounded-2xl cursor-pointer transition-all">
                         <i class="fas fa-university mb-1 text-xl"></i>
-                        <span class="text-[10px] font-black uppercase">Transferencia</span>
+                        <span class="text-[11px] font-black uppercase">Transferencia</span>
                     </label>
                 </div>
             </div>
@@ -202,7 +336,7 @@
                 <h3 class="text-xl font-black text-gray-800 tracking-tight">Elegí tu Guarnición</h3>
             </div>
             <div class="grid grid-cols-1 gap-2" id="sides-grid"></div>
-            <button onclick="closeSideModal()" class="w-full mt-6 py-3 text-gray-300 font-black text-[10px] uppercase tracking-widest">Cerrar</button>
+            <button onclick="closeSideModal()" class="w-full mt-6 py-3 text-gray-300 font-black text-[11px] uppercase tracking-widest">Cerrar</button>
         </div>
     </div>
 
@@ -211,400 +345,67 @@
          * 1. CONFIGURACIÓN DEL NEGOCIO (EDITAR AQUÍ)
          *******************************************************/
         const CONFIG = {
-    "whatsapp": "",
-    "alias": "MAXI.COM.ALE",
-    "horarios": "Mar a Dom 10:30-14:30 / 19:00-22:30",
-    "estado": "Lunes cerrado",
-    "categorias": [
-        {
-            "id": "todos",
-            "label": "Todos"
-        },
-        {
-            "id": "hoy",
-            "label": "Hoy"
-        },
-        {
-            "id": "pastas",
-            "label": "Pastas"
-        },
-        {
-            "id": "milanesas",
-            "label": "Milanesas"
-        },
-        {
-            "id": "ensaladas",
-            "label": "Ensaladas"
-        }
-    ],
-    "guarniciones": [
-        "Papas en cubos",
-        "Fritas",
-        "Puré de papas",
-        "Puré de calabaza",
-        "Puré mixto",
-        "Arroz",
-        "Papa, huevo y mayonesa",
-        "Ensalada"
-    ]
-};
+            whatsapp: "5491161850833",
+            alias: "MAXI.COM.ALE",
+            horarios: "Mar-Dom 10:30-14:30 / 19:00-22:30",
+            estado: "Lunes Cerrado",
+            categorias: [
+                { id: "todos", label: "Todos" },
+                { id: "hoy", label: "Hoy" },
+                { id: "pastas", label: "Pastas" },
+                { id: "milanesas", label: "Milanesas" },
+                { id: "ensaladas", label: "Ensaladas" }
+            ],
+            guarniciones: ["Papas en cubos", "Papas Fritas", "Puré de Papas", "Puré de Calabaza", "Puré Mixto", "Arroz", "Ensalada Mixta"]
+        };
 
         /*******************************************************
          * 2. BASE DE DATOS DE PRODUCTOS (EDITAR AQUÍ)
          *******************************************************/
         const menuData = [
-    {
-        "id": "1",
-        "name": "Pollo al curry con arroz",
-        "cat": "hoy",
-        "cash": 15000,
-        "mp": 16000,
-        "desc": "Pechuga en cubos, cebolla, zanahoria, morrón, verdeo, arvejas, arroz y curry",
-        "side": false
-    },
-    {
-        "id": "2",
-        "name": "Vacío al horno",
-        "cat": "hoy",
-        "cash": 18000,
-        "mp": 20000,
-        "desc": "",
-        "side": true
-    },
-    {
-        "id": "3",
-        "name": "Ñoquis caseros de papa (Fileto o rosa)",
-        "cat": "hoy",
-        "cash": 14000,
-        "mp": 15000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "4",
-        "name": "Ñoquis caseros de papa (Bolognesa)",
-        "cat": "hoy",
-        "cash": 16000,
-        "mp": 17000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "5",
-        "name": "Ravioles de pollo y verdura",
-        "cat": "hoy",
-        "cash": 16000,
-        "mp": 17000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "6",
-        "name": "Ravioles de ricotta con salsa boscaiola",
-        "cat": "hoy",
-        "cash": 16000,
-        "mp": 17000,
-        "desc": "panceta en cubos, cebolla, verdeo, champignones y crema",
-        "side": false
-    },
-    {
-        "id": "7",
-        "name": "Bife de costilla a la plancha",
-        "cat": "hoy",
-        "cash": 17000,
-        "mp": 19000,
-        "desc": "",
-        "side": true
-    },
-    {
-        "id": "8",
-        "name": "Ribs de cerdo con salsa barbacoa casera",
-        "cat": "hoy",
-        "cash": 22000,
-        "mp": 24000,
-        "desc": "",
-        "side": true
-    },
-    {
-        "id": "9",
-        "name": "Pastel de papas",
-        "cat": "hoy",
-        "cash": 12000,
-        "mp": 13000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "10",
-        "name": "Pastel de calabaza espinaca y queso",
-        "cat": "hoy",
-        "cash": 13000,
-        "mp": 14000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "11",
-        "name": "Pechugas con cebolla, morrón, verdeo, muzarrella y espárragos",
-        "cat": "hoy",
-        "cash": 15000,
-        "mp": 16000,
-        "desc": "",
-        "side": true
-    },
-    {
-        "id": "12",
-        "name": "Pechugas con espinacas y queso",
-        "cat": "hoy",
-        "cash": 15000,
-        "mp": 16000,
-        "desc": "",
-        "side": true
-    },
-    {
-        "id": "13",
-        "name": "Pechugas caprese",
-        "cat": "hoy",
-        "cash": 15000,
-        "mp": 16000,
-        "desc": "Cubiertas con muzzarella, tomate y albahaca",
-        "side": true
-    },
-    {
-        "id": "14",
-        "name": "Pechugas a la plancha",
-        "cat": "hoy",
-        "cash": 13000,
-        "mp": 14000,
-        "desc": "",
-        "side": true
-    },
-    {
-        "id": "15",
-        "name": "Tarta de jamón, queso, tomate, albahaca",
-        "cat": "hoy",
-        "cash": 13000,
-        "mp": 14000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "16",
-        "name": "Tarta de espinaca y queso",
-        "cat": "hoy",
-        "cash": 13000,
-        "mp": 14000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "17",
-        "name": "Tomates rellenos con arroz y atún",
-        "cat": "hoy",
-        "cash": 12000,
-        "mp": 13000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "18",
-        "name": "Ensalada completa con jamón y queso",
-        "cat": "ensaladas",
-        "cash": 12000,
-        "mp": 13000,
-        "desc": "Lechuga, tomate, zanahoria, choclo, huevo, jamón y queso",
-        "side": false
-    },
-    {
-        "id": "19",
-        "name": "Ensalada completa con pollo",
-        "cat": "ensaladas",
-        "cash": 12000,
-        "mp": 13000,
-        "desc": "Lechuga, tomate, zanahoria, choclo, huevo y pollo grillado",
-        "side": false
-    },
-    {
-        "id": "20",
-        "name": "Ensalada completa con atún",
-        "cat": "ensaladas",
-        "cash": 12000,
-        "mp": 13000,
-        "desc": "Lechuga, tomate, zanahoria, choclo, huevo y atún",
-        "side": false
-    },
-    {
-        "id": "21",
-        "name": "Tallarines (Salsa rosa o pesto)",
-        "cat": "pastas",
-        "cash": 10000,
-        "mp": 11000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "22",
-        "name": "Tallarines (Bolognesa)",
-        "cat": "pastas",
-        "cash": 12000,
-        "mp": 13000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "23",
-        "name": "Ravioles verdura/pollo/ricotta (Fileto o rosa)",
-        "cat": "pastas",
-        "cash": 13000,
-        "mp": 14000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "24",
-        "name": "Ravioles verdura/pollo/ricotta (Bolognesa)",
-        "cat": "pastas",
-        "cash": 15000,
-        "mp": 16000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "25",
-        "name": "Canelones de espinaca (Fileto o rosa)",
-        "cat": "pastas",
-        "cash": 13000,
-        "mp": 14000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "26",
-        "name": "Canelones de espinaca (Bolognesa)",
-        "cat": "pastas",
-        "cash": 15000,
-        "mp": 16000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "27",
-        "name": "Lasagna de espinacas jamón y queso (Fileto o rosa)",
-        "cat": "pastas",
-        "cash": 13000,
-        "mp": 14000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "28",
-        "name": "Lasagna de espinacas jamón y queso (Bolognesa)",
-        "cat": "pastas",
-        "cash": 15000,
-        "mp": 16000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "29",
-        "name": "Capellettis de ricotta jamón y muzarrella (Fileto o rosa)",
-        "cat": "pastas",
-        "cash": 14000,
-        "mp": 15000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "30",
-        "name": "Capellettis de ricotta jamón y muzarrella (Bolognesa)",
-        "cat": "pastas",
-        "cash": 16000,
-        "mp": 17000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "31",
-        "name": "Sandwich completo de mila",
-        "cat": "milanesas",
-        "cash": 13000,
-        "mp": 14000,
-        "desc": "mila, lechuga, tomate, jamón queso y mayonesa",
-        "side": false
-    },
-    {
-        "id": "32",
-        "name": "Sandwich completo de mila con papas",
-        "cat": "milanesas",
-        "cash": 15000,
-        "mp": 16000,
-        "desc": "",
-        "side": false
-    },
-    {
-        "id": "33",
-        "name": "Milanesa de ternera",
-        "cat": "milanesas",
-        "cash": 14000,
-        "mp": 15000,
-        "desc": "",
-        "side": true
-    },
-    {
-        "id": "34",
-        "name": "Milanesa napolitana",
-        "cat": "milanesas",
-        "cash": 16000,
-        "mp": 17000,
-        "desc": "",
-        "side": true
-    },
-    {
-        "id": "35",
-        "name": "Suprema de pollo",
-        "cat": "milanesas",
-        "cash": 14000,
-        "mp": 15000,
-        "desc": "",
-        "side": true
-    },
-    {
-        "id": "36",
-        "name": "Suprema napolitana",
-        "cat": "milanesas",
-        "cash": 16000,
-        "mp": 17000,
-        "desc": "",
-        "side": true
-    },
-    {
-        "id": "37",
-        "name": "Milanesa de peceto",
-        "cat": "milanesas",
-        "cash": 15000,
-        "mp": 16000,
-        "desc": "",
-        "side": true
-    },
-    {
-        "id": "38",
-        "name": "Milanesa de peceto napolitana",
-        "cat": "milanesas",
-        "cash": 17000,
-        "mp": 18000,
-        "desc": "",
-        "side": true
-    },
-    {
-        "id": "39",
-        "name": "Filet de merluza rebozado",
-        "cat": "milanesas",
-        "cash": 13000,
-        "mp": 14000,
-        "desc": "",
-        "side": true
-    }
-];
+            // Platos del día
+            {"id":1,"name":"Pollo al curry con arroz","cat":"hoy","cash":15000,"mp":16000,"desc":"Pechuga en cubos, cebolla, zanahoria, morrón, verdeo, arvejas, arroz y curry","side":false},
+            {"id":2,"name":"Vacío al horno","cat":"hoy","cash":18000,"mp":20000,"desc":"","side":true},
+            {"id":3,"name":"Ñoquis caseros de papa (Fileto o rosa)","cat":"hoy","cash":14000,"mp":15000,"desc":"","side":false},
+            {"id":4,"name":"Ñoquis caseros de papa (Bolognesa)","cat":"hoy","cash":16000,"mp":17000,"desc":"","side":false},
+            {"id":5,"name":"Ravioles de pollo y verdura","cat":"hoy","cash":16000,"mp":17000,"desc":"","side":false},
+            {"id":6,"name":"Ravioles de ricotta con salsa boscaiola","cat":"hoy","cash":16000,"mp":17000,"desc":"Panceta en cubos, cebolla, verdeo, champignones y crema","side":false},
+            {"id":7,"name":"Bife de costilla a la plancha","cat":"hoy","cash":17000,"mp":19000,"desc":"","side":true},
+            {"id":8,"name":"Ribs de cerdo con salsa barbacoa casera","cat":"hoy","cash":22000,"mp":24000,"desc":"","side":true},
+            {"id":9,"name":"Pastel de papas","cat":"hoy","cash":12000,"mp":13000,"desc":"","side":false},
+            {"id":10,"name":"Pastel de calabaza espinaca y queso","cat":"hoy","cash":13000,"mp":14000,"desc":"","side":false},
+            {"id":11,"name":"Pechugas cubiertas con cebolla, morrón, verdeo, muzarrella y espárragos","cat":"hoy","cash":15000,"mp":16000,"desc":"","side":true},
+            {"id":12,"name":"Pechugas cubiertas con espinacas y queso","cat":"hoy","cash":15000,"mp":16000,"desc":"","side":true},
+            {"id":13,"name":"Pechugas caprese","cat":"hoy","cash":15000,"mp":16000,"desc":"Cubiertas con muzzarella, tomate y albahaca","side":true},
+            {"id":14,"name":"Pechugas a la plancha","cat":"hoy","cash":13000,"mp":14000,"desc":"","side":true},
+            {"id":15,"name":"Tarta de jamón, queso, tomate, albahaca","cat":"hoy","cash":13000,"mp":14000,"desc":"","side":false},
+            {"id":16,"name":"Tarta de espinaca y queso","cat":"hoy","cash":13000,"mp":14000,"desc":"","side":false},
+            {"id":17,"name":"Tomates rellenos con arroz y atún","cat":"hoy","cash":12000,"mp":13000,"desc":"","side":false},
+            {"id":18,"name":"Ensalada completa con jamón y queso","cat":"hoy","cash":12000,"mp":13000,"desc":"Lechuga, tomate, zanahoria, choclo, huevo, jamón y queso","side":false},
+            {"id":19,"name":"Ensalada completa con pollo","cat":"hoy","cash":12000,"mp":13000,"desc":"Lechuga, tomate, zanahoria, choclo, huevo y pollo grillado","side":false},
+            {"id":20,"name":"Ensalada completa con atún","cat":"hoy","cash":12000,"mp":13000,"desc":"Lechuga, tomate, zanahoria, choclo, huevo y atún","side":false},
+            // Pastas
+            {"id":21,"name":"Tallarines (Salsa rosa o pesto)","cat":"pastas","cash":10000,"mp":11000,"desc":"","side":false},
+            {"id":22,"name":"Tallarines (Bolognesa)","cat":"pastas","cash":12000,"mp":13000,"desc":"","side":false},
+            {"id":23,"name":"Ravioles de verdura/pollo/ricotta (Fileto o rosa)","cat":"pastas","cash":13000,"mp":14000,"desc":"","side":false},
+            {"id":24,"name":"Ravioles de verdura/pollo/ricotta (Bolognesa)","cat":"pastas","cash":15000,"mp":16000,"desc":"","side":false},
+            {"id":25,"name":"Canelones de espinaca (Fileto o rosa)","cat":"pastas","cash":13000,"mp":14000,"desc":"","side":false},
+            {"id":26,"name":"Canelones de espinaca (Bolognesa)","cat":"pastas","cash":15000,"mp":16000,"desc":"","side":false},
+            {"id":27,"name":"Lasagna de espinacas jamón y queso (Fileto o rosa)","cat":"pastas","cash":13000,"mp":14000,"desc":"","side":false},
+            {"id":28,"name":"Lasagna de espinacas jamón y queso (Bolognesa)","cat":"pastas","cash":15000,"mp":16000,"desc":"","side":false},
+            {"id":29,"name":"Capellettis de ricotta jamón y muzarrella (Fileto o rosa)","cat":"pastas","cash":14000,"mp":15000,"desc":"","side":false},
+            {"id":30,"name":"Capellettis de ricotta jamón y muzarrella (Bolognesa)","cat":"pastas","cash":16000,"mp":17000,"desc":"","side":false},
+            // Milanesas
+            {"id":31,"name":"Sandwich completo de mila","cat":"milanesas","cash":13000,"mp":14000,"desc":"Mila, lechuga, tomate, jamón, queso y mayonesa","side":false},
+            {"id":32,"name":"Sandwich completo de mila con papas","cat":"milanesas","cash":15000,"mp":16000,"desc":"","side":false},
+            {"id":33,"name":"Milanesa de ternera","cat":"milanesas","cash":14000,"mp":15000,"desc":"","side":true},
+            {"id":34,"name":"Milanesa napolitana","cat":"milanesas","cash":16000,"mp":17000,"desc":"","side":true},
+            {"id":35,"name":"Suprema de pollo","cat":"milanesas","cash":14000,"mp":15000,"desc":"","side":true},
+            {"id":36,"name":"Suprema napolitana","cat":"milanesas","cash":16000,"mp":17000,"desc":"","side":true},
+            {"id":37,"name":"Milanesa de peceto","cat":"milanesas","cash":15000,"mp":16000,"desc":"","side":true},
+            {"id":38,"name":"Milanesa de peceto napolitana","cat":"milanesas","cash":17000,"mp":18000,"desc":"","side":true},
+            {"id":39,"name":"Filet de merluza rebozado","cat":"milanesas","cash":13000,"mp":14000,"desc":"","side":true}
+        ];
 
         /*******************************************************
          * 3. LÓGICA DEL SISTEMA (NO TOCAR)
@@ -680,23 +481,23 @@
             items.forEach(item => {
                 grid.innerHTML += `
                     <div class="bg-white rounded-3xl p-4 border border-gray-100 shadow-sm flex items-center gap-4 animate-slide-up">
-                        <div class="flex-1">
-                            <span class="text-[8px] font-black uppercase text-blue-500 bg-blue-50 px-2 py-0.5 rounded-md mb-1 inline-block italic">${item.cat}</span>
-                            <h3 class="text-gray-900 font-extrabold text-sm leading-tight mb-1">${item.name}</h3>
-                            <p class="text-[10px] text-gray-400 font-medium mb-3 italic line-clamp-1">${item.desc}</p>
-                            <div class="flex items-center gap-4">
-                                <div>
-                                    <p class="text-[8px] text-green-600 font-black uppercase italic leading-none">Efectivo</p>
+                        <div class="flex-1 min-w-0">
+                            <span class="text-[10px] font-black uppercase text-blue-500 bg-blue-50 px-2 py-0.5 rounded-md mb-2 inline-block italic">${item.cat}</span>
+                            <h3 class="text-gray-900 font-extrabold text-sm leading-tight mb-2 truncate">${item.name}</h3>
+                            ${item.desc ? `<p class="text-[11px] text-gray-400 font-medium mb-2 italic line-clamp-2">${item.desc}</p>` : ''}
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <div class="flex items-baseline gap-1">
+                                    <p class="text-[10px] text-green-600 font-black uppercase italic leading-none">Efectivo</p>
                                     <p class="text-base font-black text-gray-800 tracking-tighter">$${item.cash.toLocaleString()}</p>
                                 </div>
-                                <div class="w-px h-6 bg-gray-100"></div>
-                                <div>
-                                    <p class="text-[8px] text-blue-400 font-black uppercase italic leading-none">Transfer</p>
+                                <div class="w-px h-5 bg-gray-100 shrink-0"></div>
+                                <div class="flex items-baseline gap-1">
+                                    <p class="text-[10px] text-blue-400 font-black uppercase italic leading-none">Transfer</p>
                                     <p class="text-xs font-bold text-gray-400">$${item.mp.toLocaleString()}</p>
                                 </div>
                             </div>
                         </div>
-                        <button onclick="handleAddToCart(${item.id})" class="bg-[#1d3557] active:bg-green-500 text-white w-12 h-12 rounded-2xl shadow-lg transition-all active:scale-90 flex items-center justify-center shrink-0">
+                        <button onclick="handleAddToCart(${item.id})" class="add-btn bg-[#1d3557] active:bg-green-500 text-white w-12 h-12 rounded-2xl shadow-lg flex items-center justify-center shrink-0">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
@@ -717,7 +518,7 @@
                 const grid = document.getElementById('sides-grid');
                 grid.innerHTML = '';
                 CONFIG.guarniciones.forEach(s => {
-                    grid.innerHTML += `<button onclick="selectSide('${s}')" class="w-full py-4 px-6 bg-gray-50 border border-gray-100 rounded-2xl text-left font-bold text-gray-700 active:bg-blue-50 transition-all text-sm">${s}</button>`;
+                    grid.innerHTML += `<button onclick="selectSide('${s}')" class="side-btn w-full py-4 px-6 bg-gray-50 border border-gray-100 rounded-2xl text-left font-bold text-gray-700 active:bg-blue-50 transition-all text-[11px]">${s}</button>`;
                 });
                 document.getElementById('side-modal').classList.remove('hidden');
             } else {
@@ -757,24 +558,29 @@
 
             if (cart.length > 0) {
                 summary.classList.remove('translate-y-32');
+                summary.classList.remove('cart-summary-exit');
+                summary.classList.add('cart-summary-enter');
                 badge.innerText = cart.length;
                 totalDisplay.innerText = `$${total.toLocaleString()}`;
                 drawerTotal.innerText = `$${total.toLocaleString()}`;
             } else {
                 summary.classList.add('translate-y-32');
+                summary.classList.remove('cart-summary-enter');
+                summary.classList.add('cart-summary-exit');
             }
 
             const list = document.getElementById('cart-items-list');
             list.innerHTML = '';
             cart.forEach(item => {
                 list.innerHTML += `
-                    <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                        <div class="flex-1">
-                            <h4 class="font-bold text-gray-800 text-xs">${item.name}</h4>
-                            ${item.selectedSide ? `<p class="text-[9px] text-blue-500 font-bold uppercase italic mt-0.5">Guarnición: ${item.selectedSide}</p>` : ''}
-                            <p class="text-[10px] font-black text-gray-400 mt-1">$${(isTransfer ? item.mp : item.cash).toLocaleString()}</p>
+                    <div class="flex justify-between items-start bg-white p-4 rounded-2xl border border-gray-100 shadow-sm animate-slide-up">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-bold text-gray-800 text-xs mb-1">${item.name}</h4>
+                            ${item.desc ? `<p class="text-[10px] text-gray-400 italic mb-1 line-clamp-2">${item.desc}</p>` : ''}
+                            ${item.selectedSide ? `<p class="text-[10px] text-blue-500 font-bold uppercase italic mb-1">Guarnición: ${item.selectedSide}</p>` : ''}
+                            <p class="text-[11px] font-black text-gray-400 mt-1">$${(isTransfer ? item.mp : item.cash).toLocaleString()}</p>
                         </div>
-                        <button onclick="removeFromCart(${item.cartId})" class="text-gray-300 p-2 active:text-red-500"><i class="fas fa-trash-alt"></i></button>
+                        <button onclick="removeFromCart(${item.cartId})" class="text-gray-300 p-2 active:text-red-500 shrink-0"><i class="fas fa-trash-alt"></i></button>
                     </div>`;
             });
         }
@@ -785,14 +591,20 @@
             const summary = document.getElementById('cart-summary');
             
             if (show && cart.length > 0) {
-                drawer.classList.replace('drawer-closed', 'drawer-open');
+                drawer.classList.remove('drawer-closed');
+                drawer.classList.add('drawer-open');
                 overlay.classList.remove('hidden');
                 summary.classList.remove('translate-y-32');
+                summary.classList.remove('cart-summary-exit');
+                summary.classList.add('cart-summary-enter');
             } else {
-                drawer.classList.replace('drawer-open', 'drawer-closed');
+                drawer.classList.remove('drawer-open');
+                drawer.classList.add('drawer-closed');
                 overlay.classList.add('hidden');
                 if (cart.length === 0) {
                     summary.classList.add('translate-y-32');
+                    summary.classList.remove('cart-summary-enter');
+                    summary.classList.add('cart-summary-exit');
                 }
             }
         }
@@ -829,6 +641,19 @@
             navigator.clipboard.writeText(CONFIG.alias).then(() => {
                 showToast("Alias copiado: " + CONFIG.alias);
             });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.classList.add('show');
+            toast.classList.remove('hide');
+            
+            // Hide after 2 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                toast.classList.add('hide');
+            }, 2000);
         }
 
         function showToast(message) {
