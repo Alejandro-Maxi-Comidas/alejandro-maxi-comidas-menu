@@ -315,6 +315,20 @@
         </div>
 
         <div class="bg-white p-6 pt-0 space-y-3">
+            <!-- Address Section -->
+            <div id="address-section" class="border border-gray-100 rounded-2xl overflow-hidden">
+                <div id="address-header" class="p-4 flex justify-between items-center cursor-pointer bg-gray-50" onclick="toggleAddress()">
+                    <span id="address-summary" class="text-[11px] font-black uppercase text-gray-600">Agregar dirección</span>
+                    <i id="address-icon" class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                </div>
+                <div id="address-form" class="p-4 space-y-3 hidden">
+                    <input type="text" id="addr-street" placeholder="Calle y número" class="w-full p-3 bg-gray-50 rounded-xl text-sm border border-gray-100">
+                    <input type="text" id="addr-apt" placeholder="Departamento (opcional)" class="w-full p-3 bg-gray-50 rounded-xl text-sm border border-gray-100">
+                    <input type="text" id="addr-city" placeholder="Localidad" class="w-full p-3 bg-gray-50 rounded-xl text-sm border border-gray-100">
+                    <button onclick="confirmAddress()" class="w-full bg-[#1d3557] text-white py-2 rounded-xl font-black text-[11px] uppercase">Confirmar</button>
+                </div>
+            </div>
+
             <div class="flex justify-between items-center bg-[#1d3557] p-5 rounded-2xl text-white shadow-xl">
                 <span class="font-black uppercase text-xs italic opacity-80">Total a pagar:</span>
                 <span id="drawer-total-display" class="font-black text-2xl tracking-tighter">$0</span>
@@ -587,7 +601,7 @@
     },
     {
         "id": "23",
-        "name": "Ravioles de verdura y pollo o ricotta (fileto o rosa)",
+        "name": "Ravioles (verdura/pollo o ricotta) con salsa fileto o rosa",
         "cat": "pastas",
         "cash": 13000,
         "mp": 14000,
@@ -596,7 +610,7 @@
     },
     {
         "id": "24",
-        "name": "Ravioles de verdura y pollo o ricotta (bolognesa)",
+        "name": "Ravioles (verdura/pollo o ricotta) con bolognesa",
         "cat": "pastas",
         "cash": 15000,
         "mp": 16000,
@@ -605,7 +619,7 @@
     },
     {
         "id": "25",
-        "name": "Canelones de espinaca (fileto o rosa)",
+        "name": "Canelones de espinaca con salsa fileto o rosa",
         "cat": "pastas",
         "cash": 13000,
         "mp": 14000,
@@ -614,7 +628,7 @@
     },
     {
         "id": "26",
-        "name": "Canelones de espinaca (bolognesa)",
+        "name": "Canelones de espinaca con bolognesa",
         "cat": "pastas",
         "cash": 15000,
         "mp": 16000,
@@ -623,7 +637,7 @@
     },
     {
         "id": "27",
-        "name": "Lasagna de espinacas jamón y queso (fileto o rosa)",
+        "name": "Lasagna de espinacas jamón y queso con salsa fileto o rosa",
         "cat": "pastas",
         "cash": 13000,
         "mp": 14000,
@@ -632,7 +646,7 @@
     },
     {
         "id": "28",
-        "name": "Lasagna de espinacas jamón y queso (bolognesa)",
+        "name": "Lasagna de espinacas jamón y queso con bolognesa",
         "cat": "pastas",
         "cash": 15000,
         "mp": 16000,
@@ -641,7 +655,7 @@
     },
     {
         "id": "29",
-        "name": "Capellettis caseros de ricotta jamón y muzarrella (fileto o rosa)",
+        "name": "Capellettis caseros de ricotta jamón y muzarrella con salsa fileto o rosa",
         "cat": "pastas",
         "cash": 14000,
         "mp": 15000,
@@ -650,7 +664,7 @@
     },
     {
         "id": "30",
-        "name": "Capellettis caseros de ricotta jamón y muzarrella (bolognesa)",
+        "name": "Capellettis caseros de ricotta jamón y muzarrella con bolognesa",
         "cat": "pastas",
         "cash": 16000,
         "mp": 17000,
@@ -672,7 +686,7 @@
         "cat": "milanesas",
         "cash": 15000,
         "mp": 16000,
-        "desc": "",
+        "desc": "mila, lechuga, tomate, jamón queso y mayonesa",
         "side": false
     },
     {
@@ -948,6 +962,31 @@
             renderMenu(cat === 'todos' ? menuData : menuData.filter(i => i.cat === cat));
         }
 
+        let customerAddress = null;
+
+        function toggleAddress() {
+            const form = document.getElementById('address-form');
+            const icon = document.getElementById('address-icon');
+            form.classList.toggle('hidden');
+            icon.classList.toggle('fa-chevron-down');
+            icon.classList.toggle('fa-chevron-up');
+        }
+
+        function confirmAddress() {
+            const street = document.getElementById('addr-street').value;
+            const apt = document.getElementById('addr-apt').value;
+            const city = document.getElementById('addr-city').value;
+
+            if (!street || !city) {
+                showToast("Calle y Localidad son obligatorios");
+                return;
+            }
+
+            customerAddress = `${street}${apt ? ', ' + apt : ''}, ${city}`;
+            document.getElementById('address-summary').innerText = `Dirección: ${customerAddress}`;
+            toggleAddress();
+        }
+
         function sendWhatsApp() {
             if (cart.length === 0) return;
             if (!CONFIG.whatsapp) {
@@ -962,6 +1001,11 @@
                 showToast("Por favor, seleccioná un método de pago");
                 return;
             }
+
+            if (!customerAddress) {
+                showToast("Por favor, ingresá tu dirección");
+                return;
+            }
             
             let msg = "*PEDIDO - MAXICOMIDAS*\n----------------------------\n";
             cart.forEach(i => {
@@ -970,7 +1014,7 @@
             });
             const total = cart.reduce((a, b) => a + (isTransfer ? b.mp : b.cash), 0);
             msg += `----------------------------\n✅ *TOTAL: $${total.toLocaleString()}*\n`;
-            msg += `💳 *PAGO:* ${isTransfer ? 'Transferencia' : 'Efectivo'}\n\n📍 *Dirección:* \n`;
+            msg += `💳 *PAGO:* ${isTransfer ? 'Transferencia' : 'Efectivo'}\n\n📍 *Dirección:* ${customerAddress}\n`;
             
             // Encode the message properly to handle special characters
             const encodedMessage = encodeURIComponent(msg);
