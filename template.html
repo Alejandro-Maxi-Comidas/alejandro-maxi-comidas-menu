@@ -94,7 +94,7 @@
             bottom: 100px;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
-            background-color: #1d3557;
+            background-color: #ef4444;
             color: white;
             padding: 12px 24px;
             border-radius: 50px;
@@ -298,7 +298,7 @@
             <p class="text-[11px] font-black uppercase text-gray-400 mb-3 tracking-widest text-center">Seleccioná cómo vas a pagar:</p>
             <div class="grid grid-cols-2 gap-3">
                 <div>
-                    <input type="radio" name="payment" id="pay-cash" value="cash" class="hidden payment-option" checked onchange="updateUI()">
+                    <input type="radio" name="payment" id="pay-cash" value="cash" class="hidden payment-option" onchange="updateUI()">
                     <label for="pay-cash" class="flex flex-col items-center justify-center p-3 border-2 border-gray-100 rounded-2xl cursor-pointer transition-all">
                         <i class="fas fa-money-bill-wave mb-1 text-xl"></i>
                         <span class="text-[11px] font-black uppercase">Efectivo</span>
@@ -623,6 +623,13 @@
             }
             
             const isTransfer = document.getElementById('pay-transfer').checked;
+            const isCash = document.getElementById('pay-cash').checked;
+            
+            if (!isTransfer && !isCash) {
+                showToast("Por favor, seleccioná un método de pago");
+                return;
+            }
+            
             let msg = "*PEDIDO - MAXICOMIDAS*\n----------------------------\n";
             cart.forEach(i => {
                 msg += `• *${i.name}* ($${(isTransfer ? i.mp : i.cash).toLocaleString()})\n`;
