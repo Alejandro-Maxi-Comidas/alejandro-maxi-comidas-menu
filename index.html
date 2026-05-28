@@ -313,6 +313,13 @@
                 </div>
             </div>
         </div>
+        <div id="cash-amount-container" class="px-6 pb-4 hidden">
+            <label class="text-[10px] font-black uppercase text-gray-400 mb-1 block text-center">Monto con el que pagás (para el vuelto):</label>
+            <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold">$</span>
+                <input type="number" id="cash-amount" placeholder="Ej: 20000" class="w-full pl-7 p-3 bg-gray-50 rounded-xl text-sm border border-gray-100 font-bold">
+            </div>
+        </div>
 
         <div class="bg-white p-6 pt-0 space-y-3">
             <!-- Address Section -->
@@ -912,6 +919,11 @@
 
             const total = cart.reduce((acc, i) => acc + (isTransfer ? i.mp : i.cash), 0);
 
+            const cashContainer = document.getElementById('cash-amount-container');
+            if (cashContainer) {
+                cashContainer.classList.toggle('hidden', !document.getElementById('pay-cash').checked);
+            }
+
             if (cart.length > 0) {
                 summary.classList.remove('translate-y-32');
                 summary.classList.remove('cart-summary-exit');
@@ -1002,6 +1014,13 @@
                 console.error('WhatsApp number not configured');
                 return;
             }
+
+            // Confirmar dirección automáticamente si hay datos ingresados
+            const street = document.getElementById('addr-street').value;
+            const city = document.getElementById('addr-city').value;
+            if (!customerAddress && (street || city)) {
+                confirmAddress();
+            }
             
             const isTransfer = document.getElementById('pay-transfer').checked;
             const isCash = document.getElementById('pay-cash').checked;
@@ -1023,7 +1042,16 @@
             });
             const total = cart.reduce((a, b) => a + (isTransfer ? b.mp : b.cash), 0);
             msg += `----------------------------\n✅ *TOTAL: $${total.toLocaleString()}*\n`;
-            msg += `💳 *PAGO:* ${isTransfer ? 'Transferencia' : 'Efectivo'}\n\n📍 *Dirección:* ${customerAddress}\n`;
+            msg += `💳 *PAGO:* ${isTransfer ? 'Transferencia' : 'Efectivo'}\n`;
+            
+            if (isCash) {
+                const cashAmount = document.getElementById('cash-amount').value;
+                if (cashAmount) {
+                    msg += `💵 *PAGO CON:* $${parseInt(cashAmount).toLocaleString()}\n`;
+                }
+            }
+            
+            msg += `\n📍 *Dirección:* ${customerAddress}\n`;
             
             // Encode the message properly to handle special characters
             const encodedMessage = encodeURIComponent(msg);
