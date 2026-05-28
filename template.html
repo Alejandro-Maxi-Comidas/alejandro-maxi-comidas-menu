@@ -177,6 +177,16 @@
         /* Scrollbar Hide */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Hide Number Input Spinners */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
         
         /* Menu Card Animations */
         @keyframes slideUp {
@@ -303,7 +313,7 @@
             <label class="text-[10px] font-black uppercase text-gray-400 mb-1 block text-center">Monto con el que pagás (para el vuelto):</label>
             <div class="relative">
                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold">$</span>
-                <input type="number" id="cash-amount" placeholder="Ej: 20000" class="w-full pl-7 p-3 bg-gray-50 rounded-xl text-sm border border-gray-100 font-bold">
+                <input type="text" id="cash-amount" placeholder="Ej: 20,000" class="w-full pl-7 p-3 bg-gray-50 rounded-xl text-sm border border-gray-100 font-bold" oninput="formatCashAmount(this)">
             </div>
         </div>
 
@@ -318,7 +328,7 @@
                     <input type="text" id="addr-street" placeholder="Calle y número" class="w-full p-3 bg-gray-50 rounded-xl text-sm border border-gray-100" onkeydown="handleAddressKeyDown(event)">
                     <input type="text" id="addr-apt" placeholder="Departamento (opcional)" class="w-full p-3 bg-gray-50 rounded-xl text-sm border border-gray-100" onkeydown="handleAddressKeyDown(event)">
                     <input type="text" id="addr-city" placeholder="Localidad" class="w-full p-3 bg-gray-50 rounded-xl text-sm border border-gray-100" onkeydown="handleAddressKeyDown(event)">
-                    <button onclick="confirmAddress()" class="w-full bg-[#1d3557] text-white py-2 rounded-xl font-black text-[11px] uppercase">Confirmar</button>
+                    <button onclick="confirmAddress()" class="w-full bg-[#457b9d] text-white py-3 rounded-xl font-black text-[11px] uppercase">Confirmar</button>
                 </div>
             </div>
 
@@ -568,7 +578,10 @@
                 cashContainer.classList.toggle('hidden', !document.getElementById('pay-cash').checked);
             }
 
-            if (cart.length > 0) {
+            const drawer = document.getElementById('cart-drawer');
+            const isDrawerOpen = drawer.classList.contains('drawer-open');
+
+            if (cart.length > 0 && !isDrawerOpen) {
                 summary.classList.remove('translate-y-32');
                 summary.classList.remove('cart-summary-exit');
                 summary.classList.add('cart-summary-enter');
@@ -579,6 +592,13 @@
                 summary.classList.add('translate-y-32');
                 summary.classList.remove('cart-summary-enter');
                 summary.classList.add('cart-summary-exit');
+                
+                // Still update totals even if summary is hidden
+                if (cart.length > 0) {
+                    badge.innerText = cart.length;
+                    totalDisplay.innerText = `$${total.toLocaleString()}`;
+                    drawerTotal.innerText = `$${total.toLocaleString()}`;
+                }
             }
 
             const list = document.getElementById('cart-items-list');
@@ -636,6 +656,42 @@
         }
 
         let customerAddress = null;
+
+        function formatCashAmount(input) {
+            const cursorPosition = input.selectionStart;
+            const originalValue = input.value;
+            
+            // Remove all non-digits except the decimal point
+            let value = originalValue.replace(/[^\d.]/g, '');
+            
+            // Ensure only one decimal point
+            const parts = value.split('.');
+            if (parts.length > 2) {
+                value = parts[0] + '.' + parts.slice(1).join('');
+            }
+            
+            const [integer, decimal] = value.split('.');
+            const formattedInteger = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            
+            const formattedValue = decimal !== undefined
+                ? `${formattedInteger}.${decimal}`
+                : formattedInteger;
+            
+            input.value = formattedValue;
+            
+            // Restore cursor position by counting characters in the formatted prefix
+            const beforeCursor = originalValue.substring(0, cursorPosition);
+            const cleanedBeforeCursor = beforeCursor.replace(/[^\d.]/g, '');
+            const partsBefore = cleanedBeforeCursor.split('.');
+            
+            let formattedBefore = partsBefore[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            if (partsBefore.length > 1) {
+                formattedBefore += '.' + partsBefore[1];
+            }
+            
+            const newPosition = formattedBefore.length;
+            input.setSelectionRange(newPosition, newPosition);
+        }
 
         function handleAddressKeyDown(event) {
             if (event.key === 'Enter') {
@@ -701,20 +757,33 @@
                 return;
             }
             
+            const total = cart.reduce((a, b) => a + (isTransfer ? b.mp : b.cash), 0);
+
+            if (isCash) {
+                const cashAmountStr = document.getElementById('cash-amount').value;
+                if (!cashAmountStr) {
+                    showToast("Por favor, ingresá el monto con el que vas a pagar");
+                    return;
+                }
+                const numericCashAmount = parseFloat(cashAmountStr.replace(/,/g, ''));
+                if (isNaN(numericCashAmount) || numericCashAmount < total) {
+                    showToast(`El monto debe ser mayor o igual al total ($${total.toLocaleString()})`);
+                    return;
+                }
+            }
+
             let msg = "*PEDIDO - MAXICOMIDAS*\n----------------------------\n";
             cart.forEach(i => {
                 msg += `• *${i.name}* ($${(isTransfer ? i.mp : i.cash).toLocaleString()})\n`;
                 if(i.selectedSide) msg += `  _Guarnición: ${i.selectedSide}_\n`;
             });
-            const total = cart.reduce((a, b) => a + (isTransfer ? b.mp : b.cash), 0);
             msg += `----------------------------\n✅ *TOTAL: $${total.toLocaleString()}*\n`;
             msg += `💳 *PAGO:* ${isTransfer ? 'Transferencia' : 'Efectivo'}\n`;
             
             if (isCash) {
                 const cashAmount = document.getElementById('cash-amount').value;
-                if (cashAmount) {
-                    msg += `💵 *PAGO CON:* $${parseInt(cashAmount).toLocaleString()}\n`;
-                }
+                const numericValue = cashAmount.replace(/,/g, '');
+                msg += `💵 *PAGO CON:* $${parseFloat(numericValue).toLocaleString()}\n`;
             }
             
             msg += `\n📍 *Dirección:* ${customerAddress}\n`;
