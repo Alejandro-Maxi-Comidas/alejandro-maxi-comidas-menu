@@ -46,13 +46,15 @@
         }
 
         .drawer-open {
-            transform: translateY(0);
+            transform: translate(-50%, 0);
             opacity: 1;
+            pointer-events: auto;
         }
         
         .drawer-closed {
-            transform: translateY(100%);
+            transform: translate(-50%, 100%);
             opacity: 0;
+            pointer-events: none;
         }
 
         /* Cart Summary Animation */
@@ -219,7 +221,7 @@
 
     <!-- Header -->
     <header class="bg-[#1d3557] text-white px-6 pt-6 pb-10 shadow-xl rounded-b-[2.5rem]">
-        <div class="max-w-md mx-auto">
+        <div class="max-w-5xl mx-auto">
             <div class="flex justify-between items-start mb-4">
                 <div>
                     <h1 class="text-3xl font-extrabold tracking-tight italic">MAXICOMIDAS</h1>
@@ -244,7 +246,7 @@
     </header>
 
     <!-- Info Pill -->
-    <div class="max-w-md mx-auto -mt-6 px-6 relative z-10">
+    <div class="max-w-5xl mx-auto -mt-6 px-6 relative z-10">
         <div class="bg-white rounded-full shadow-lg py-2.5 px-4 flex justify-between items-center text-[11px] font-black text-gray-500 uppercase tracking-tight border border-gray-100">
             <span><i class="fas fa-motorcycle text-blue-500 mr-1"></i> Envío sin cargo</span>
             <span class="w-px h-3 bg-gray-200"></span>
@@ -256,35 +258,19 @@
     <div id="toast" class="toast">Copiado al portapapeles</div>
 
     <!-- Categorías -->
-    <nav class="max-w-md mx-auto px-6 mt-3 overflow-x-auto no-scrollbar flex gap-3 py-2 sticky top-0 z-30 bg-[#f3f4f6]/80 backdrop-blur-md" id="category-nav">
+    <nav class="max-w-5xl mx-auto px-6 mt-3 overflow-x-auto no-scrollbar flex gap-3 py-2 sticky top-0 z-30 bg-[#f3f4f6]/80 backdrop-blur-md" id="category-nav">
         <!-- Rendered from Config -->
     </nav>
 
     <!-- Lista de Productos -->
-    <main class="max-w-md mx-auto px-6 mt-2 pb-40 space-y-3" id="menu-grid">
+    <main class="max-w-5xl mx-auto px-6 mt-2 pb-40 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="menu-grid">
         <!-- Render dinámico -->
     </main>
 
-    <!-- Resumen Carrito Flotante -->
-    <div id="cart-summary" class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md bg-[#1d3557] text-white rounded-[2rem] p-4 shadow-2xl flex items-center justify-between z-50 transform translate-y-32 transition-transform duration-500 cursor-pointer" onclick="toggleCartDrawer(true)">
-        <div class="flex items-center gap-3">
-            <div class="relative bg-white/10 p-2 rounded-xl">
-                <i class="fas fa-shopping-basket text-xl"></i>
-                <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#1d3557]">0</span>
-            </div>
-            <div>
-                <p id="cart-text-qty" class="text-[11px] font-bold uppercase text-blue-200 tracking-wider">Ver mi pedido</p>
-                <p id="cart-text-total" class="font-black text-lg leading-tight tracking-tighter">$0</p>
-            </div>
-        </div>
-        <div class="bg-white/10 p-2 rounded-lg">
-            <i class="fas fa-chevron-up text-xs"></i>
-        </div>
-    </div>
 
     <!-- Drawer Carrito -->
     <div id="cart-drawer-overlay" class="fixed inset-0 bg-black/40 z-[60] hidden backdrop-blur-sm" onclick="toggleCartDrawer(false)"></div>
-    <div id="cart-drawer" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-[2.5rem] z-[70] cart-drawer drawer-closed max-h-[92vh] overflow-hidden flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
+    <div id="cart-drawer" class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl bg-white rounded-t-[2.5rem] z-[70] cart-drawer drawer-closed max-h-[92vh] overflow-hidden flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
         <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mt-4 mb-2"></div>
         
         <div class="px-6 py-4 flex justify-between items-center border-b border-gray-50">
@@ -329,9 +315,9 @@
                     <i id="address-icon" class="fas fa-chevron-down text-gray-400 text-xs"></i>
                 </div>
                 <div id="address-form" class="p-4 space-y-3 hidden">
-                    <input type="text" id="addr-street" placeholder="Calle y número" class="w-full p-3 bg-gray-50 rounded-xl text-sm border border-gray-100">
-                    <input type="text" id="addr-apt" placeholder="Departamento (opcional)" class="w-full p-3 bg-gray-50 rounded-xl text-sm border border-gray-100">
-                    <input type="text" id="addr-city" placeholder="Localidad" class="w-full p-3 bg-gray-50 rounded-xl text-sm border border-gray-100">
+                    <input type="text" id="addr-street" placeholder="Calle y número" class="w-full p-3 bg-gray-50 rounded-xl text-sm border border-gray-100" onkeydown="handleAddressKeyDown(event)">
+                    <input type="text" id="addr-apt" placeholder="Departamento (opcional)" class="w-full p-3 bg-gray-50 rounded-xl text-sm border border-gray-100" onkeydown="handleAddressKeyDown(event)">
+                    <input type="text" id="addr-city" placeholder="Localidad" class="w-full p-3 bg-gray-50 rounded-xl text-sm border border-gray-100" onkeydown="handleAddressKeyDown(event)">
                     <button onclick="confirmAddress()" class="w-full bg-[#1d3557] text-white py-2 rounded-xl font-black text-[11px] uppercase">Confirmar</button>
                 </div>
             </div>
@@ -620,14 +606,22 @@
                 drawer.classList.remove('drawer-closed');
                 drawer.classList.add('drawer-open');
                 overlay.classList.remove('hidden');
-                summary.classList.remove('translate-y-32');
-                summary.classList.remove('cart-summary-exit');
-                summary.classList.add('cart-summary-enter');
+                
+                // Ocultar el resumen cuando el drawer está abierto
+                summary.classList.add('translate-y-32');
+                summary.classList.remove('cart-summary-enter');
+                summary.classList.add('cart-summary-exit');
             } else {
                 drawer.classList.remove('drawer-open');
                 drawer.classList.add('drawer-closed');
                 overlay.classList.add('hidden');
-                if (cart.length === 0) {
+                
+                // Mostrar el resumen nuevamente al cerrar el drawer si hay items
+                if (cart.length > 0) {
+                    summary.classList.remove('translate-y-32');
+                    summary.classList.remove('cart-summary-exit');
+                    summary.classList.add('cart-summary-enter');
+                } else {
                     summary.classList.add('translate-y-32');
                     summary.classList.remove('cart-summary-enter');
                     summary.classList.add('cart-summary-exit');
@@ -642,6 +636,20 @@
         }
 
         let customerAddress = null;
+
+        function handleAddressKeyDown(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const id = event.target.id;
+                if (id === 'addr-street') {
+                    document.getElementById('addr-apt').focus();
+                } else if (id === 'addr-apt') {
+                    document.getElementById('addr-city').focus();
+                } else if (id === 'addr-city') {
+                    confirmAddress();
+                }
+            }
+        }
 
         function toggleAddress() {
             const form = document.getElementById('address-form');
@@ -746,5 +754,22 @@
 
         window.onload = initApp;
     </script>
+
+    <!-- Resumen Carrito Flotante -->
+    <button id="cart-summary" class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-md bg-[#1d3557] text-white rounded-[2rem] p-4 shadow-2xl flex items-center justify-between z-[100] transform translate-y-32 transition-transform duration-500" onclick="toggleCartDrawer(true)">
+        <div class="flex items-center gap-3">
+            <div class="relative bg-white/10 p-2 rounded-xl">
+                <i class="fas fa-shopping-basket text-xl"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#1d3557]">0</span>
+            </div>
+            <div class="text-left">
+                <p id="cart-text-qty" class="text-[11px] font-bold uppercase text-blue-200 tracking-wider">Ver mi pedido</p>
+                <p id="cart-text-total" class="font-black text-lg leading-tight tracking-tighter">$0</p>
+            </div>
+        </div>
+        <div class="bg-white/10 p-2 rounded-lg">
+            <i class="fas fa-chevron-up text-xs"></i>
+        </div>
+    </button>
 </body>
 </html>
